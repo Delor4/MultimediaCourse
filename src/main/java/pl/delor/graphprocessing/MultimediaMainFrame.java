@@ -188,6 +188,11 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuEdit.setText("Edit");
 
         jMenuItem3.setText("jMenuItem3");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenuEdit.add(jMenuItem3);
 
         jMenuBar1.add(jMenuEdit);
@@ -280,6 +285,10 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
             Logger.getLogger(MultimediaMainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    private void setChangedImage(BufferedImage image){
+        jImageChanged.setImage(image);
+        edited = true;
+    }
     private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
         loadImage();
     }//GEN-LAST:event_jButtonOpenActionPerformed
@@ -300,6 +309,13 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExitActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jMenuItemExitActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+       JPreview p = new JPreviewToGray(this, image_changed);
+       if(p.getExitStatus() == JPreview.STATUS.OK){
+           setChangedImage(p.getImageOutput());
+       }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments
