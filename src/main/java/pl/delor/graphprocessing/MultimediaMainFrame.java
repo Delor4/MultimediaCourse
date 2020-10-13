@@ -6,12 +6,9 @@
 package pl.delor.graphprocessing;
 
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,28 +23,29 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author delor
  */
 public class MultimediaMainFrame extends javax.swing.JFrame {
-    
+
     BufferedImage image_source = null;
     BufferedImage image_changed = null;
-    
+
     Boolean edited = false;
 
-private final String appIconString =  "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAB3RJTUUH5AoNBxcXesQknAAAAAlwSFlzAAAu4AAALuABDw7X4QAAAARnQU1BAACxjwv8YQUAAABRUExURQAAAGZmZjMzM2YzAMzM/zOZ/2ZmmczMzJlmM/+ZM//Mmf/MZv+ZAP/MM8zMmf9mADOZzMyZZpmZmWaZzMyZM8yZmZlmAMyZAJkzAMyZzMxmADlTPGMAAAABdFJOUwBA5thmAAABLUlEQVR42u3U2Q6CMBAF0FJbK7sbuPz/hwqWaQHTMItveh8ICemxvQwq9UupKun6MSKgHSIwPNAKgFYGbG5gtxEAbkzgDsBT84AeKui1ZgE3qGCndZYETDKuhgqYQFcJgVOogAnACao7D3B5OAEPeIQpYAIlnKBnArMKWICLL5EHNAD0TOAU5hgJWLsE4CXWWGAQ5kSooKQAM6GDOe7QwFuwHxU4PLDYwxUqoALW31yggtwQgEkYL2eooCEBXhgTK+ABxzycgAaAEOa4JAKwgxKAgg/4OBIQKrTD39k7tSEAdp7GAwUBgKXTMIyHqJ1BA/G3p3t3yAv/iAbEedw7QwDi6vVXiQOWS3jAahoMFTAyYBUxYMTAIj8AoPIH0oBSGpsUgCbSgMpwUf98Ny9G+CvZvnzSbwAAAABJRU5ErkJggg==";
+    private final String appIconString = "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAB3RJTUUH5AoNBxcXesQknAAAAAlwSFlzAAAu4AAALuABDw7X4QAAAARnQU1BAACxjwv8YQUAAABRUExURQAAAGZmZjMzM2YzAMzM/zOZ/2ZmmczMzJlmM/+ZM//Mmf/MZv+ZAP/MM8zMmf9mADOZzMyZZpmZmWaZzMyZM8yZmZlmAMyZAJkzAMyZzMxmADlTPGMAAAABdFJOUwBA5thmAAABLUlEQVR42u3U2Q6CMBAF0FJbK7sbuPz/hwqWaQHTMItveh8ICemxvQwq9UupKun6MSKgHSIwPNAKgFYGbG5gtxEAbkzgDsBT84AeKui1ZgE3qGCndZYETDKuhgqYQFcJgVOogAnACao7D3B5OAEPeIQpYAIlnKBnArMKWICLL5EHNAD0TOAU5hgJWLsE4CXWWGAQ5kSooKQAM6GDOe7QwFuwHxU4PLDYwxUqoALW31yggtwQgEkYL2eooCEBXhgTK+ABxzycgAaAEOa4JAKwgxKAgg/4OBIQKrTD39k7tSEAdp7GAwUBgKXTMIyHqJ1BA/G3p3t3yAv/iAbEedw7QwDi6vVXiQOWS3jAahoMFTAyYBUxYMTAIj8AoPIH0oBSGpsUgCbSgMpwUf98Ny9G+CvZvnzSbwAAAABJRU5ErkJggg==";
 
     /**
-     * Creates new form OknoGlowne
+     * Creates new form MultimediaMainFrame
      */
     public MultimediaMainFrame() {
         initComponents();
-            if (appIconString != null) {
-                    ImageIcon img = getIconFromBase64(appIconString);
-                    setIconImage(img.getImage());
-            }
+        if (appIconString != null) {
+            ImageIcon img = getIconFromBase64(appIconString);
+            setIconImage(img.getImage());
+        }
     }
+
     public static ImageIcon getIconFromBase64(String s) {
-		byte[] imageBytes = Base64.getDecoder().decode(s.getBytes());
-		return new ImageIcon(imageBytes);
-	}
+        byte[] imageBytes = Base64.getDecoder().decode(s.getBytes());
+        return new ImageIcon(imageBytes);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -210,13 +208,14 @@ private final String appIconString =  "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    public static BufferedImage copyImage(BufferedImage source){
+    public static BufferedImage copyImage(BufferedImage source) {
         BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
         Graphics g = b.createGraphics();
         g.drawImage(source, 0, 0, null);
         g.dispose();
         return b;
     }
+
     private String getFileExtension(File file) {
         if (file == null) {
             return "";
@@ -226,29 +225,31 @@ private final String appIconString =  "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt
         String ext = i > 0 ? name.substring(i + 1) : "";
         return ext;
     }
-     private String getImageExtension(String ext) {
-         ext = ext.toLowerCase();
-         switch(ext){
-            case "jpg":
-            case "jpeg":
-            case "gif":
-            case "png":
+
+    private String getImageExtension(String ext) {
+        ext = ext.toLowerCase();
+        switch (ext) {
+            case "jpg", "jpeg", "gif", "png" -> {
                 return ext;
+            }
         }
-         return "jpeg";
-     }
-    private void saveImage(){
-        if(image_changed == null)
+        return "jpeg";
+    }
+
+    private void saveImage() {
+        if (image_changed == null) {
             return;
-        
+        }
+
         FileNameExtensionFilter f = new FileNameExtensionFilter("JPG & GIF", "jpg", "jpeg", "gif");
         fileChooserSave.setFileFilter(f);
-        if (fileChooserSave.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
+        if (fileChooserSave.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
             return;
-        
+        }
+
         File file = fileChooserSave.getSelectedFile();
         String ext = getImageExtension(getFileExtension(file));
-        
+
         try {
             ImageIO.write(image_changed, ext, file);
             edited = false;
@@ -256,19 +257,22 @@ private final String appIconString =  "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt
             Logger.getLogger(MultimediaMainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private void loadImage(){
+
+    private void loadImage() {
         FileNameExtensionFilter f = new FileNameExtensionFilter("JPG & GIF", "jpg", "jpeg", "gif");
         fileChooserLoad.setFileFilter(f);
-        if (fileChooserLoad.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
+        if (fileChooserLoad.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
             return;
+        }
 
-        if(fileChooserLoad.getSelectedFile() == null)
+        if (fileChooserLoad.getSelectedFile() == null) {
             return;
-        
+        }
+
         try {
             image_source = ImageIO.read(fileChooserLoad.getSelectedFile());
-            jImageSource.setImage(image_source);            
-            
+            jImageSource.setImage(image_source);
+
             image_changed = copyImage(image_source);
             jImageChanged.setImage(image_changed);
             edited = false;
@@ -277,7 +281,7 @@ private final String appIconString =  "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt
         }
     }
     private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
-        loadImage();       
+        loadImage();
     }//GEN-LAST:event_jButtonOpenActionPerformed
 
     private void jMenuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenActionPerformed
@@ -290,7 +294,7 @@ private final String appIconString =  "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt
 
     private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutActionPerformed
         JOptionPane.showMessageDialog(this,
-       "  Graphics processing.\n\n by Sebastian Kucharczyk");
+                "  Graphics processing.\n\n by Sebastian Kucharczyk");
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
     private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExitActionPerformed
