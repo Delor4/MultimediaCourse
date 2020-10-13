@@ -187,7 +187,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
         jMenuEdit.setText("Edit");
 
-        jMenuItem3.setText("jMenuItem3");
+        jMenuItem3.setText("To gray");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
@@ -285,7 +285,8 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
             Logger.getLogger(MultimediaMainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private void setChangedImage(BufferedImage image){
+
+    private void setChangedImage(BufferedImage image) {
         jImageChanged.setImage(image);
         edited = true;
     }
@@ -311,10 +312,10 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemExitActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-       JPreview p = new JPreviewToGray(this, image_changed);
-       if(p.getExitStatus() == JPreview.STATUS.OK){
-           setChangedImage(p.getImageOutput());
-       }
+        JPreview p = new JPreviewToGray(this, image_changed);
+        if (p.getExitStatus() == JPreview.STATUS.OK) {
+            setChangedImage(p.getImageOutput());
+        }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**

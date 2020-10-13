@@ -16,32 +16,36 @@ public class JPreviewToGray extends JPreview {
 
     /**
      * Creates new form JPreviewToGray
+     *
      * @param parent
      * @param image
      */
     public JPreviewToGray(Frame parent, BufferedImage image) {
         super(parent, image);
     }
-    
+
     @Override
-    protected void processImage(){
+    protected void processImage() {
         BufferedImage out = this.getImageOutput();
-        for(int y = 0; y < out.getHeight(); y++)
-            for(int x = 0; x < out.getWidth(); x++){
+        for (int y = 0; y < out.getHeight(); y++) {
+            for (int x = 0; x < out.getWidth(); x++) {
                 int pixel = out.getRGB(x, y);
                 int r = getRed(pixel);
                 int g = getGreen(pixel);
                 int b = getBlue(pixel);
-                int srednia = (int)((r + g + b)/3.0);
+                int srednia = (int) ((r + g + b) / 3.0);
                 int pixelSzary = toRGB(srednia, srednia, srednia);
                 out.setRGB(x, y, pixelSzary);
             }
+        }
         this.setImageOutput(out);
     }
+
     @Override
     protected String title() {
         return "To gray";
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -67,7 +71,7 @@ public class JPreviewToGray extends JPreview {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

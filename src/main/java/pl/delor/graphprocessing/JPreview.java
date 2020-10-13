@@ -15,12 +15,14 @@ import java.awt.image.BufferedImage;
  */
 public abstract class JPreview extends javax.swing.JDialog {
 
-    enum STATUS { NONE, OK, CANCEL };
+    enum STATUS {
+        NONE, OK, CANCEL
+    };
     /**
      * Creates new form JPreview
      */
     private STATUS _exit = STATUS.NONE;
-    
+
     BufferedImage imageSource = null;
 
     public BufferedImage getImageSource() {
@@ -32,52 +34,71 @@ public abstract class JPreview extends javax.swing.JDialog {
         this.imageOutput = imageOutput;
         jImagePreview.setImage(this.imageOutput);
     }
-    
-    public BufferedImage getImageOutput(){
+
+    public BufferedImage getImageOutput() {
         return imageOutput;
     }
+
     @Override
-    public void setTitle(String title){
+    public void setTitle(String title) {
         super.setTitle("Preview - " + title);
     }
+
     private JPreview() {
         initComponents();
     }
+
     public JPreview(Frame parent, BufferedImage image) {
         super(parent);
+
+        _exit = STATUS.NONE;
+
         initComponents();
-        
+
         this.setTitle(title());
-        
-        this.imageSource = image;
-        this.imageOutput = image;
-                
+
+        this.imageSource = MultimediaMainFrame.copyImage(image);
+        this.imageOutput = MultimediaMainFrame.copyImage(image);
+
         this.processImage();
-        
+
         this.pack();
         setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         this.setVisible(true);
     }
-    
+
     protected abstract void processImage();
+
     protected abstract String title();
-    
-    public STATUS getExitStatus(){
+
+    public STATUS getExitStatus() {
         return this._exit;
     }
-    
-    public static int getRed(int pixel){
-        return (pixel << 8) >>> 24 ;
+
+    public static int getAlfa(int pixel) {
+        return (pixel & 0xff000000) >>> 24;
     }
-    public static int getGreen(int pixel){
-        return (pixel << 16) >>> 24;
+
+    public static int getRed(int pixel) {
+        return (pixel & 0x00ff0000) >>> 16;
     }
-    public static int getBlue(int pixel){
-        return (pixel << 24) >>> 24;
+
+    public static int getGreen(int pixel) {
+        return (pixel & 0x0000ff00) >>> 8;
     }
-    public static int toRGB(int r, int g, int b){
-        return (((r << 8) | g) << 8) | b;
+
+    public static int getBlue(int pixel) {
+        return (pixel & 0x000000ff);
     }
+
+    public static int toRGB(int r, int g, int b) {
+        return toARGB(r, g, b, 0xff);
+    }
+
+    public static int toARGB(int r, int g, int b, int a) {
+        return ((((a << 8 | r) << 8) | g) << 8) | b;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -94,7 +115,7 @@ public abstract class JPreview extends javax.swing.JDialog {
         jButtonCancel = new javax.swing.JButton();
 
         setMinimumSize(new java.awt.Dimension(59, 28));
-        setPreferredSize(new java.awt.Dimension(200, 220));
+        setPreferredSize(new java.awt.Dimension(271, 291));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jImagePreview.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));

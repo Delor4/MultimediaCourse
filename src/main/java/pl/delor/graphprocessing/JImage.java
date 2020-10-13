@@ -20,7 +20,6 @@ public class JImage extends javax.swing.JPanel {
      */
     private BufferedImage image = null;
 
-    
     public JImage() {
         initComponents();
     }
@@ -33,12 +32,12 @@ public class JImage extends javax.swing.JPanel {
         this.image = image;
         this.repaint();
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if(image != null){
-            Image imageResized = image.getScaledInstance(this.getWidth(), this.getHeight(), 
+        if (image != null) {
+            Image imageResized = image.getScaledInstance(this.getWidth(), this.getHeight(),
                     java.awt.Image.SCALE_SMOOTH);
             g.drawImage(imageResized, 0, 0, this); // see javadoc for more info on the parameters            
         }
