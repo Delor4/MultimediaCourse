@@ -7,9 +7,12 @@ package pl.delor.graphprocessing;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -29,13 +32,22 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     
     Boolean edited = false;
 
+private final String appIconString =  "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAB3RJTUUH5AoNBxcXesQknAAAAAlwSFlzAAAu4AAALuABDw7X4QAAAARnQU1BAACxjwv8YQUAAABRUExURQAAAGZmZjMzM2YzAMzM/zOZ/2ZmmczMzJlmM/+ZM//Mmf/MZv+ZAP/MM8zMmf9mADOZzMyZZpmZmWaZzMyZM8yZmZlmAMyZAJkzAMyZzMxmADlTPGMAAAABdFJOUwBA5thmAAABLUlEQVR42u3U2Q6CMBAF0FJbK7sbuPz/hwqWaQHTMItveh8ICemxvQwq9UupKun6MSKgHSIwPNAKgFYGbG5gtxEAbkzgDsBT84AeKui1ZgE3qGCndZYETDKuhgqYQFcJgVOogAnACao7D3B5OAEPeIQpYAIlnKBnArMKWICLL5EHNAD0TOAU5hgJWLsE4CXWWGAQ5kSooKQAM6GDOe7QwFuwHxU4PLDYwxUqoALW31yggtwQgEkYL2eooCEBXhgTK+ABxzycgAaAEOa4JAKwgxKAgg/4OBIQKrTD39k7tSEAdp7GAwUBgKXTMIyHqJ1BA/G3p3t3yAv/iAbEedw7QwDi6vVXiQOWS3jAahoMFTAyYBUxYMTAIj8AoPIH0oBSGpsUgCbSgMpwUf98Ny9G+CvZvnzSbwAAAABJRU5ErkJggg==";
 
     /**
      * Creates new form OknoGlowne
      */
     public MultimediaMainFrame() {
         initComponents();
+            if (appIconString != null) {
+                    ImageIcon img = getIconFromBase64(appIconString);
+                    setIconImage(img.getImage());
+            }
     }
+    public static ImageIcon getIconFromBase64(String s) {
+		byte[] imageBytes = Base64.getDecoder().decode(s.getBytes());
+		return new ImageIcon(imageBytes);
+	}
 
     /**
      * This method is called from within the constructor to initialize the form.
