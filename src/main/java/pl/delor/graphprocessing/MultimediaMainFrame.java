@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.mavenproject1;
+package pl.delor.graphprocessing;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -49,9 +49,9 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
         fileChooserLoad = new javax.swing.JFileChooser("./");
         fileChooserSave = new javax.swing.JFileChooser("./");
-        jImageSource = new com.mycompany.mavenproject1.JImage();
+        jImageSource = new pl.delor.graphprocessing.JImage();
         jPanelSeparator = new javax.swing.JPanel();
-        jImageChanged = new com.mycompany.mavenproject1.JImage();
+        jImageChanged = new pl.delor.graphprocessing.JImage();
         jButtonOpen = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
@@ -316,8 +316,8 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JFileChooser fileChooserLoad;
     private javax.swing.JFileChooser fileChooserSave;
     private javax.swing.JButton jButtonOpen;
-    private com.mycompany.mavenproject1.JImage jImageChanged;
-    private com.mycompany.mavenproject1.JImage jImageSource;
+    private pl.delor.graphprocessing.JImage jImageChanged;
+    private pl.delor.graphprocessing.JImage jImageSource;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuFile;
