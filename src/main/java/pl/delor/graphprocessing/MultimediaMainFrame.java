@@ -166,6 +166,11 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuFile.add(jMenuItemSave);
 
         jMenuItemExit.setText("Exit");
+        jMenuItemExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemExitActionPerformed(evt);
+            }
+        });
         jMenuFile.add(jMenuItemExit);
 
         jMenuBar1.add(jMenuFile);
@@ -275,6 +280,10 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this,
        "  Graphics processing.\n\n by Sebastian Kucharczyk");
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
+
+    private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItemExitActionPerformed
 
     /**
      * @param args the command line arguments
