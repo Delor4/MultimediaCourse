@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -49,13 +50,14 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jImageChanged = new com.mycompany.mavenproject1.JImage();
         jButtonOpen = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        jMenuFile = new javax.swing.JMenu();
         jMenuItemOpen = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItemSave = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        jMenuEdit = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        jMenuHelp = new javax.swing.JMenu();
+        jMenuItemAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Graphics processing");
@@ -141,7 +143,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         getContentPane().add(jButtonOpen, gridBagConstraints);
 
-        jMenu1.setText("File");
+        jMenuFile.setText("File");
 
         jMenuItemOpen.setText("Open ...");
         jMenuItemOpen.addActionListener(new java.awt.event.ActionListener() {
@@ -149,25 +151,39 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
                 jMenuItemOpenActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItemOpen);
+        jMenuFile.add(jMenuItemOpen);
 
-        jMenuItem1.setText("Zapisz");
-        jMenu1.add(jMenuItem1);
+        jMenuItemSave.setText("Save");
+        jMenuItemSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSaveActionPerformed(evt);
+            }
+        });
+        jMenuFile.add(jMenuItemSave);
 
-        jMenuItem2.setText("Zamknij");
-        jMenu1.add(jMenuItem2);
+        jMenuItem2.setText("Exit");
+        jMenuFile.add(jMenuItem2);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(jMenuFile);
 
-        jMenu2.setText("Edit");
+        jMenuEdit.setText("Edit");
 
         jMenuItem3.setText("jMenuItem3");
-        jMenu2.add(jMenuItem3);
+        jMenuEdit.add(jMenuItem3);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(jMenuEdit);
 
-        jMenu3.setText("Help");
-        jMenuBar1.add(jMenu3);
+        jMenuHelp.setText("Help");
+
+        jMenuItemAbout.setText("About");
+        jMenuItemAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAboutActionPerformed(evt);
+            }
+        });
+        jMenuHelp.add(jMenuItemAbout);
+
+        jMenuBar1.add(jMenuHelp);
 
         setJMenuBar(jMenuBar1);
 
@@ -185,9 +201,11 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
         FileNameExtensionFilter f=new FileNameExtensionFilter("JPG & GIF", "jpg", "jpeg", "gif");
         fileChooserOpen.setFileFilter(f);
-
         fileChooserOpen.showOpenDialog(this);
 
+        if(fileChooserOpen.getSelectedFile() == null)
+            return;
+        
         File file = new File(fileChooserOpen.getSelectedFile().getAbsolutePath());
         try {
             image_source = ImageIO.read(file);
@@ -202,9 +220,17 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonOpenActionPerformed
 
     private void jMenuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenActionPerformed
-        // TODO add your handling code here:
         jButtonOpenActionPerformed(evt);
     }//GEN-LAST:event_jMenuItemOpenActionPerformed
+
+    private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemSaveActionPerformed
+
+    private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutActionPerformed
+        JOptionPane.showMessageDialog(this,
+       "  Graphics processing.\n\n by Sebastian Kucharczyk");
+    }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -247,14 +273,15 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButtonOpen;
     private com.mycompany.mavenproject1.JImage jImageChanged;
     private com.mycompany.mavenproject1.JImage jImageSource;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenu jMenuEdit;
+    private javax.swing.JMenu jMenuFile;
+    private javax.swing.JMenu jMenuHelp;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItemAbout;
     private javax.swing.JMenuItem jMenuItemOpen;
+    private javax.swing.JMenuItem jMenuItemSave;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
