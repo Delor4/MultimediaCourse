@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -25,6 +26,8 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     
     BufferedImage image_source = null;
     BufferedImage image_changed = null;
+    
+    Boolean edited = false;
 
 
     /**
@@ -44,16 +47,17 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        fileChooserOpen = new javax.swing.JFileChooser("./");
+        fileChooserLoad = new javax.swing.JFileChooser("./");
+        fileChooserSave = new javax.swing.JFileChooser("./");
         jImageSource = new com.mycompany.mavenproject1.JImage();
-        jPanel1 = new javax.swing.JPanel();
+        jPanelSeparator = new javax.swing.JPanel();
         jImageChanged = new com.mycompany.mavenproject1.JImage();
         jButtonOpen = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuItemOpen = new javax.swing.JMenuItem();
         jMenuItemSave = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItemExit = new javax.swing.JMenuItem();
         jMenuEdit = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuHelp = new javax.swing.JMenu();
@@ -87,16 +91,16 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         gridBagConstraints.weighty = 1.0;
         getContentPane().add(jImageSource, gridBagConstraints);
 
-        jPanel1.setMinimumSize(new java.awt.Dimension(5, 5));
+        jPanelSeparator.setMinimumSize(new java.awt.Dimension(5, 5));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanelSeparatorLayout = new javax.swing.GroupLayout(jPanelSeparator);
+        jPanelSeparator.setLayout(jPanelSeparatorLayout);
+        jPanelSeparatorLayout.setHorizontalGroup(
+            jPanelSeparatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 5, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanelSeparatorLayout.setVerticalGroup(
+            jPanelSeparatorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 5, Short.MAX_VALUE)
         );
 
@@ -104,7 +108,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        getContentPane().add(jPanel1, gridBagConstraints);
+        getContentPane().add(jPanelSeparator, gridBagConstraints);
 
         jImageChanged.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -145,7 +149,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
         jMenuFile.setText("File");
 
-        jMenuItemOpen.setText("Open ...");
+        jMenuItemOpen.setText("Load ...");
         jMenuItemOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemOpenActionPerformed(evt);
@@ -153,7 +157,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         });
         jMenuFile.add(jMenuItemOpen);
 
-        jMenuItemSave.setText("Save");
+        jMenuItemSave.setText("Save ...");
         jMenuItemSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemSaveActionPerformed(evt);
@@ -161,8 +165,8 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         });
         jMenuFile.add(jMenuItemSave);
 
-        jMenuItem2.setText("Exit");
-        jMenuFile.add(jMenuItem2);
+        jMenuItemExit.setText("Exit");
+        jMenuFile.add(jMenuItemExit);
 
         jMenuBar1.add(jMenuFile);
 
@@ -196,27 +200,67 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         g.dispose();
         return b;
     }
-    
-    private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
-
-        FileNameExtensionFilter f=new FileNameExtensionFilter("JPG & GIF", "jpg", "jpeg", "gif");
-        fileChooserOpen.setFileFilter(f);
-        fileChooserOpen.showOpenDialog(this);
-
-        if(fileChooserOpen.getSelectedFile() == null)
+    private String getFileExtension(File file) {
+        if (file == null) {
+            return "";
+        }
+        String name = file.getName();
+        int i = name.lastIndexOf('.');
+        String ext = i > 0 ? name.substring(i + 1) : "";
+        return ext;
+    }
+     private String getImageExtension(String ext) {
+         ext = ext.toLowerCase();
+         switch(ext){
+            case "jpg":
+            case "jpeg":
+            case "gif":
+            case "png":
+                return ext;
+        }
+         return "jpeg";
+     }
+    private void saveImage(){
+        if(image_changed == null)
             return;
         
-        File file = new File(fileChooserOpen.getSelectedFile().getAbsolutePath());
+        FileNameExtensionFilter f = new FileNameExtensionFilter("JPG & GIF", "jpg", "jpeg", "gif");
+        fileChooserSave.setFileFilter(f);
+        if (fileChooserSave.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
+            return;
+        
+        File file = fileChooserSave.getSelectedFile();
+        String ext = getImageExtension(getFileExtension(file));
+        
         try {
-            image_source = ImageIO.read(file);
+            ImageIO.write(image_changed, ext, file);
+            edited = false;
+        } catch (IOException ex) {
+            Logger.getLogger(MultimediaMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    private void loadImage(){
+        FileNameExtensionFilter f = new FileNameExtensionFilter("JPG & GIF", "jpg", "jpeg", "gif");
+        fileChooserLoad.setFileFilter(f);
+        if (fileChooserLoad.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
+            return;
+
+        if(fileChooserLoad.getSelectedFile() == null)
+            return;
+        
+        try {
+            image_source = ImageIO.read(fileChooserLoad.getSelectedFile());
             jImageSource.setImage(image_source);            
             
             image_changed = copyImage(image_source);
             jImageChanged.setImage(image_changed);
-            
+            edited = false;
         } catch (IOException ex) {
             Logger.getLogger(MultimediaMainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
+        loadImage();       
     }//GEN-LAST:event_jButtonOpenActionPerformed
 
     private void jMenuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenActionPerformed
@@ -224,7 +268,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemOpenActionPerformed
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
-        // TODO add your handling code here:
+        saveImage();
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
     private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutActionPerformed
@@ -269,7 +313,8 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JFileChooser fileChooserOpen;
+    private javax.swing.JFileChooser fileChooserLoad;
+    private javax.swing.JFileChooser fileChooserSave;
     private javax.swing.JButton jButtonOpen;
     private com.mycompany.mavenproject1.JImage jImageChanged;
     private com.mycompany.mavenproject1.JImage jImageSource;
@@ -277,11 +322,11 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenu jMenuHelp;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItemAbout;
+    private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JMenuItem jMenuItemOpen;
     private javax.swing.JMenuItem jMenuItemSave;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanelSeparator;
     // End of variables declaration//GEN-END:variables
 }
