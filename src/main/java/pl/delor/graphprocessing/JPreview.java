@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
  *
  * @author delor
  */
-public abstract class JPreview extends javax.swing.JDialog {
+public class JPreview extends javax.swing.JDialog {
 
     enum STATUS {
         NONE, OK, CANCEL
@@ -44,32 +44,27 @@ public abstract class JPreview extends javax.swing.JDialog {
         super.setTitle("Preview - " + title);
     }
 
-    private JPreview() {
-        initComponents();
-    }
-
-    public JPreview(Frame parent, BufferedImage image) {
+    public JPreview(Frame parent, BufferedImage image, JPreviewPanel panel) {
         super(parent);
 
         _exit = STATUS.NONE;
-
-        initComponents();
-
-        this.setTitle(title());
-
         this.imageSource = MultimediaMainFrame.copyImage(image);
         this.imageOutput = MultimediaMainFrame.copyImage(image);
 
-        this.processImage();
+        initComponents();
+        panel.setParent(this);
+        jPanel2.add(panel);
 
-        this.pack();
+        this.setTitle(panel.title());
+
+        panel.processImage();
+
+        this.revalidate();
+        this.repaint();
+        pack();
         setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         this.setVisible(true);
     }
-
-    protected abstract void processImage();
-
-    protected abstract String title();
 
     public STATUS getExitStatus() {
         return this._exit;
@@ -95,8 +90,12 @@ public abstract class JPreview extends javax.swing.JDialog {
         return toARGB(r, g, b, 0xff);
     }
 
+    public static int toConstraints(int val) {
+        return (val < 0) ? 0 : (val > 255 ? 255 : val);
+    }
+
     public static int toARGB(int r, int g, int b, int a) {
-        return ((((a << 8 | r) << 8) | g) << 8) | b;
+        return ((((toConstraints(a) << 8 | toConstraints(r)) << 8) | toConstraints(g)) << 8) | toConstraints(b);
     }
 
     /**
@@ -110,6 +109,7 @@ public abstract class JPreview extends javax.swing.JDialog {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jImagePreview = new pl.delor.graphprocessing.JImage();
+        jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jButtonOk = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
@@ -128,7 +128,7 @@ public abstract class JPreview extends javax.swing.JDialog {
         );
         jImagePreviewLayout.setVerticalGroup(
             jImagePreviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 290, Short.MAX_VALUE)
+            .addGap(0, 280, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -140,6 +140,11 @@ public abstract class JPreview extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         getContentPane().add(jImagePreview, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        getContentPane().add(jPanel2, gridBagConstraints);
 
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 15, 5));
 
@@ -161,7 +166,7 @@ public abstract class JPreview extends javax.swing.JDialog {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jPanel1, gridBagConstraints);
 
@@ -184,5 +189,6 @@ public abstract class JPreview extends javax.swing.JDialog {
     private javax.swing.JButton jButtonOk;
     private pl.delor.graphprocessing.JImage jImagePreview;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 }

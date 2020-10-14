@@ -5,45 +5,50 @@
  */
 package pl.delor.graphprocessing;
 
-import java.awt.Frame;
 import java.awt.image.BufferedImage;
+import static pl.delor.graphprocessing.MultimediaMainFrame.copyImage;
 
 /**
  *
  * @author delor
  */
-public class JPreviewToGray extends JPreview {
+public abstract class JPreviewPanel extends javax.swing.JPanel {
 
     /**
-     * Creates new form JPreviewToGray
-     *
-     * @param parent
-     * @param image
+     * Creates new form JPreviewPanel
      */
-    public JPreviewToGray(Frame parent, BufferedImage image) {
-        super(parent, image);
+    private JPreview viewParent = null;
+
+    public JPreview getParent() {
+        return viewParent;
     }
 
-    @Override
-    protected void processImage() {
-        BufferedImage out = this.getImageOutput();
-        for (int y = 0; y < out.getHeight(); y++) {
-            for (int x = 0; x < out.getWidth(); x++) {
-                int pixel = out.getRGB(x, y);
-                int r = getRed(pixel);
-                int g = getGreen(pixel);
-                int b = getBlue(pixel);
-                int srednia = (int) ((r + g + b) / 3.0);
-                int pixelSzary = toRGB(srednia, srednia, srednia);
-                out.setRGB(x, y, pixelSzary);
-            }
-        }
-        this.setImageOutput(out);
+    public void setParent(JPreview parent) {
+        this.viewParent = parent;
     }
 
-    @Override
-    protected String title() {
-        return "To gray";
+    public JPreviewPanel() {
+        initComponents();
+    }
+
+    protected abstract String title();
+
+    protected void processImage(){
+        this.setImageOutput(doProcessImage(copyImage(getImageInput()),getImageOutput()));
+    };
+    
+    protected abstract BufferedImage doProcessImage(BufferedImage input, BufferedImage output);
+    
+    public BufferedImage getImageInput() {
+        return this.viewParent.getImageSource();
+    }
+
+    public BufferedImage getImageOutput() {
+        return this.viewParent.getImageOutput();
+    }
+
+    public void setImageOutput(BufferedImage i) {
+        this.viewParent.setImageOutput(i);
     }
 
     /**
@@ -55,10 +60,8 @@ public class JPreviewToGray extends JPreview {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 400, Short.MAX_VALUE)
@@ -67,8 +70,6 @@ public class JPreviewToGray extends JPreview {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
 

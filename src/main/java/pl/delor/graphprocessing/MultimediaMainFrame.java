@@ -24,8 +24,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class MultimediaMainFrame extends javax.swing.JFrame {
 
-    BufferedImage image_source = null;
-    BufferedImage image_changed = null;
+    BufferedImage imageInput = null;
+    BufferedImage imageOutput = null;
+
+    public BufferedImage getImageOutput() {
+        return imageOutput;
+    }
 
     Boolean edited = false;
 
@@ -46,7 +50,33 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         byte[] imageBytes = Base64.getDecoder().decode(s.getBytes());
         return new ImageIcon(imageBytes);
     }
+public static BufferedImage copyImage(BufferedImage source) {
+        BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
+        Graphics g = b.createGraphics();
+        g.drawImage(source, 0, 0, null);
+        g.dispose();
+        return b;
+    }
 
+    private static String getFileExtension(File file) {
+        if (file == null) {
+            return "";
+        }
+        String name = file.getName();
+        int i = name.lastIndexOf('.');
+        String ext = i > 0 ? name.substring(i + 1) : "";
+        return ext;
+    }
+
+    private static String getImageExtension(String ext) {
+        ext = ext.toLowerCase();
+        switch (ext) {
+            case "jpg", "jpeg", "gif", "png" -> {
+                return ext;
+            }
+        }
+        return "jpeg";
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -69,7 +99,8 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuItemSave = new javax.swing.JMenuItem();
         jMenuItemExit = new javax.swing.JMenuItem();
         jMenuEdit = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItemToGray = new javax.swing.JMenuItem();
+        jMenuItemBrightness = new javax.swing.JMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuItemAbout = new javax.swing.JMenuItem();
 
@@ -187,13 +218,21 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
         jMenuEdit.setText("Edit");
 
-        jMenuItem3.setText("To gray");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemToGray.setText("To gray");
+        jMenuItemToGray.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                jMenuItemToGrayActionPerformed(evt);
             }
         });
-        jMenuEdit.add(jMenuItem3);
+        jMenuEdit.add(jMenuItemToGray);
+
+        jMenuItemBrightness.setText("Brightness");
+        jMenuItemBrightness.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemBrightnessActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuItemBrightness);
 
         jMenuBar1.add(jMenuEdit);
 
@@ -213,36 +252,10 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    public static BufferedImage copyImage(BufferedImage source) {
-        BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
-        Graphics g = b.createGraphics();
-        g.drawImage(source, 0, 0, null);
-        g.dispose();
-        return b;
-    }
-
-    private String getFileExtension(File file) {
-        if (file == null) {
-            return "";
-        }
-        String name = file.getName();
-        int i = name.lastIndexOf('.');
-        String ext = i > 0 ? name.substring(i + 1) : "";
-        return ext;
-    }
-
-    private String getImageExtension(String ext) {
-        ext = ext.toLowerCase();
-        switch (ext) {
-            case "jpg", "jpeg", "gif", "png" -> {
-                return ext;
-            }
-        }
-        return "jpeg";
-    }
+    
 
     private void saveImage() {
-        if (image_changed == null) {
+        if (imageOutput == null) {
             return;
         }
 
@@ -256,7 +269,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         String ext = getImageExtension(getFileExtension(file));
 
         try {
-            ImageIO.write(image_changed, ext, file);
+            ImageIO.write(imageOutput, ext, file);
             edited = false;
         } catch (IOException ex) {
             Logger.getLogger(MultimediaMainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -275,18 +288,27 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         }
 
         try {
-            image_source = ImageIO.read(fileChooserLoad.getSelectedFile());
-            jImageSource.setImage(image_source);
+            imageInput = ImageIO.read(fileChooserLoad.getSelectedFile());
+            jImageSource.setImage(imageInput);
 
-            image_changed = copyImage(image_source);
-            jImageChanged.setImage(image_changed);
+            imageOutput = copyImage(imageInput);
+            jImageChanged.setImage(imageOutput);
             edited = false;
         } catch (IOException ex) {
             Logger.getLogger(MultimediaMainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    private static void showPreviewPanel(MultimediaMainFrame mf, JPreviewPanel panel) {
+        JPreview p = new JPreview(mf, mf.getImageOutput(), panel);
+        if (p.getExitStatus() == JPreview.STATUS.OK) {
+            mf.setChangedImage(p.getImageOutput());
+        }
+        p.dispose();
+    }
+
     private void setChangedImage(BufferedImage image) {
+        imageOutput = image;
         jImageChanged.setImage(image);
         edited = true;
     }
@@ -311,12 +333,13 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jMenuItemExitActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        JPreview p = new JPreviewToGray(this, image_changed);
-        if (p.getExitStatus() == JPreview.STATUS.OK) {
-            setChangedImage(p.getImageOutput());
-        }
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    private void jMenuItemToGrayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemToGrayActionPerformed
+        showPreviewPanel(this, new JPreviewPanelTG());
+    }//GEN-LAST:event_jMenuItemToGrayActionPerformed
+
+    private void jMenuItemBrightnessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemBrightnessActionPerformed
+        showPreviewPanel(this, new JPreviewPanelBrightness());
+    }//GEN-LAST:event_jMenuItemBrightnessActionPerformed
 
     /**
      * @param args the command line arguments
@@ -364,11 +387,12 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenu jMenuHelp;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItemAbout;
+    private javax.swing.JMenuItem jMenuItemBrightness;
     private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JMenuItem jMenuItemOpen;
     private javax.swing.JMenuItem jMenuItemSave;
+    private javax.swing.JMenuItem jMenuItemToGray;
     private javax.swing.JPanel jPanelSeparator;
     // End of variables declaration//GEN-END:variables
 }
