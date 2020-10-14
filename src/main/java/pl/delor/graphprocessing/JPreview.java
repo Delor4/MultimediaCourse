@@ -54,7 +54,7 @@ public class JPreview extends javax.swing.JDialog {
 
         initComponents();
         panel.setParent(this);
-        jPanel2.add(panel);
+        jPanelParameters.add(panel);
 
         this.setTitle(panel.title());
 
@@ -82,8 +82,8 @@ public class JPreview extends javax.swing.JDialog {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jImagePreview = new pl.delor.graphprocessing.JImage();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        jPanelParameters = new javax.swing.JPanel();
+        jPanelButtons = new javax.swing.JPanel();
         jButtonOk = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
 
@@ -117,9 +117,9 @@ public class JPreview extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        getContentPane().add(jPanel2, gridBagConstraints);
+        getContentPane().add(jPanelParameters, gridBagConstraints);
 
-        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 15, 5));
+        jPanelButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 15, 5));
 
         jButtonOk.setText("Ok");
         jButtonOk.addActionListener(new java.awt.event.ActionListener() {
@@ -127,7 +127,7 @@ public class JPreview extends javax.swing.JDialog {
                 jButtonOkActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonOk);
+        jPanelButtons.add(jButtonOk);
 
         jButtonCancel.setText("Cancel");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -135,13 +135,13 @@ public class JPreview extends javax.swing.JDialog {
                 jButtonCancelActionPerformed(evt);
             }
         });
-        jPanel1.add(jButtonCancel);
+        jPanelButtons.add(jButtonCancel);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        getContentPane().add(jPanel1, gridBagConstraints);
+        getContentPane().add(jPanelButtons, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -161,7 +161,7 @@ public class JPreview extends javax.swing.JDialog {
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonOk;
     private pl.delor.graphprocessing.JImage jImagePreview;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanelButtons;
+    private javax.swing.JPanel jPanelParameters;
     // End of variables declaration//GEN-END:variables
 }

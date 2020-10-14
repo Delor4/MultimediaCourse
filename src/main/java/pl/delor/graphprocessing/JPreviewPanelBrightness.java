@@ -33,30 +33,30 @@ public class JPreviewPanelBrightness extends JPreviewPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jSlider1 = new javax.swing.JSlider();
+        jSliderBrightness = new javax.swing.JSlider();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setName(""); // NOI18N
         setLayout(new java.awt.BorderLayout());
 
-        jSlider1.setMaximum(255);
-        jSlider1.setMinimum(-255);
-        jSlider1.setValue(0);
-        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+        jSliderBrightness.setMaximum(255);
+        jSliderBrightness.setMinimum(-255);
+        jSliderBrightness.setValue(0);
+        jSliderBrightness.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSlider1StateChanged(evt);
+                jSliderBrightnessStateChanged(evt);
             }
         });
-        add(jSlider1, java.awt.BorderLayout.CENTER);
+        add(jSliderBrightness, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
+    private void jSliderBrightnessStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSliderBrightnessStateChanged
         super.processImage();
-    }//GEN-LAST:event_jSlider1StateChanged
+    }//GEN-LAST:event_jSliderBrightnessStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JSlider jSlider1;
+    private javax.swing.JSlider jSliderBrightness;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -66,23 +66,13 @@ public class JPreviewPanelBrightness extends JPreviewPanel {
 
     @Override
     protected BufferedImage doProcessImage(BufferedImage input, BufferedImage output) {
-        int rozjasnienie = jSlider1.getValue();
+        int brightness = jSliderBrightness.getValue();
         for (int y = 0; y < input.getHeight(); y++) {
             for (int x = 0; x < input.getWidth(); x++) {
                 int pixel = input.getRGB(x, y);
-                int r = getRed(pixel) + rozjasnienie;
-                int g = getGreen(pixel) + rozjasnienie;
-                int b = getBlue(pixel) + rozjasnienie;
-
-                if (r > 255) {
-                    r = g = b = 255;
-                }
-                if (g > 255) {
-                    r = g = b = 255;
-                }
-                if (b > 255) {
-                    r = g = b = 255;
-                }
+                int r = getRed(pixel) + brightness;
+                int g = getGreen(pixel) + brightness;
+                int b = getBlue(pixel) + brightness;
 
                 output.setRGB(x, y, toRGB(r, g, b));
             }

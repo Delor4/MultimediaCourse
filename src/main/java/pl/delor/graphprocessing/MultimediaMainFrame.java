@@ -64,7 +64,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jPanelSeparator = new javax.swing.JPanel();
         jImageChanged = new pl.delor.graphprocessing.JImage();
         jButtonOpen = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenuBarMain = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuItemOpen = new javax.swing.JMenuItem();
         jMenuItemSave = new javax.swing.JMenuItem();
@@ -185,7 +185,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         });
         jMenuFile.add(jMenuItemExit);
 
-        jMenuBar1.add(jMenuFile);
+        jMenuBarMain.add(jMenuFile);
 
         jMenuEdit.setText("Edit");
 
@@ -205,7 +205,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         });
         jMenuEdit.add(jMenuItemBrightness);
 
-        jMenuBar1.add(jMenuEdit);
+        jMenuBarMain.add(jMenuEdit);
 
         jMenuHelp.setText("Help");
 
@@ -217,9 +217,9 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         });
         jMenuHelp.add(jMenuItemAbout);
 
-        jMenuBar1.add(jMenuHelp);
+        jMenuBarMain.add(jMenuHelp);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(jMenuBarMain);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -356,7 +356,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButtonOpen;
     private pl.delor.graphprocessing.JImage jImageChanged;
     private pl.delor.graphprocessing.JImage jImageSource;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBarMain;
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenu jMenuHelp;
