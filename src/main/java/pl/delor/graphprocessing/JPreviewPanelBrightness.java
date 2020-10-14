@@ -6,10 +6,10 @@
 package pl.delor.graphprocessing;
 
 import java.awt.image.BufferedImage;
-import static pl.delor.graphprocessing.JPreview.getBlue;
-import static pl.delor.graphprocessing.JPreview.getGreen;
-import static pl.delor.graphprocessing.JPreview.getRed;
-import static pl.delor.graphprocessing.JPreview.toRGB;
+import static pl.delor.graphprocessing.GP.getBlue;
+import static pl.delor.graphprocessing.GP.getGreen;
+import static pl.delor.graphprocessing.GP.getRed;
+import static pl.delor.graphprocessing.GP.toRGB;
 
 /**
  *
@@ -67,19 +67,27 @@ public class JPreviewPanelBrightness extends JPreviewPanel {
     @Override
     protected BufferedImage doProcessImage(BufferedImage input, BufferedImage output) {
         int rozjasnienie = jSlider1.getValue();
-        for(int y = 0; y < input.getHeight(); y++)
-            for(int x = 0; x < input.getWidth(); x++){
+        for (int y = 0; y < input.getHeight(); y++) {
+            for (int x = 0; x < input.getWidth(); x++) {
                 int pixel = input.getRGB(x, y);
                 int r = getRed(pixel) + rozjasnienie;
                 int g = getGreen(pixel) + rozjasnienie;
                 int b = getBlue(pixel) + rozjasnienie;
-                
-                if(r>255) r = g = b = 255;
-                if(g>255) r = g = b = 255;
-                if(b>255) r = g = b = 255;
-                
-                output.setRGB(x, y, toRGB(r,g,b));
+
+                if (r > 255) {
+                    r = g = b = 255;
+                }
+                if (g > 255) {
+                    r = g = b = 255;
+                }
+                if (b > 255) {
+                    r = g = b = 255;
+                }
+
+                output.setRGB(x, y, toRGB(r, g, b));
             }
+        }
         return output;
     }
+
 }

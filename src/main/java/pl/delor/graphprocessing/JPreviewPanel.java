@@ -6,7 +6,7 @@
 package pl.delor.graphprocessing;
 
 import java.awt.image.BufferedImage;
-import static pl.delor.graphprocessing.MultimediaMainFrame.copyImage;
+import static pl.delor.graphprocessing.GP.copyImage;
 
 /**
  *
@@ -33,12 +33,12 @@ public abstract class JPreviewPanel extends javax.swing.JPanel {
 
     protected abstract String title();
 
-    protected void processImage(){
-        this.setImageOutput(doProcessImage(copyImage(getImageInput()),getImageOutput()));
-    };
-    
+    protected void processImage() {
+        this.setImageOutput(doProcessImage(copyImage(getImageInput()), getImageOutput()));
+    }
+
     protected abstract BufferedImage doProcessImage(BufferedImage input, BufferedImage output);
-    
+
     public BufferedImage getImageInput() {
         return this.viewParent.getImageSource();
     }

@@ -8,6 +8,7 @@ package pl.delor.graphprocessing;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.image.BufferedImage;
+import static pl.delor.graphprocessing.GP.copyImage;
 
 /**
  *
@@ -48,8 +49,8 @@ public class JPreview extends javax.swing.JDialog {
         super(parent);
 
         _exit = STATUS.NONE;
-        this.imageSource = MultimediaMainFrame.copyImage(image);
-        this.imageOutput = MultimediaMainFrame.copyImage(image);
+        this.imageSource = copyImage(image);
+        this.imageOutput = copyImage(image);
 
         initComponents();
         panel.setParent(this);
@@ -68,34 +69,6 @@ public class JPreview extends javax.swing.JDialog {
 
     public STATUS getExitStatus() {
         return this._exit;
-    }
-
-    public static int getAlfa(int pixel) {
-        return (pixel & 0xff000000) >>> 24;
-    }
-
-    public static int getRed(int pixel) {
-        return (pixel & 0x00ff0000) >>> 16;
-    }
-
-    public static int getGreen(int pixel) {
-        return (pixel & 0x0000ff00) >>> 8;
-    }
-
-    public static int getBlue(int pixel) {
-        return (pixel & 0x000000ff);
-    }
-
-    public static int toRGB(int r, int g, int b) {
-        return toARGB(r, g, b, 0xff);
-    }
-
-    public static int toConstraints(int val) {
-        return (val < 0) ? 0 : (val > 255 ? 255 : val);
-    }
-
-    public static int toARGB(int r, int g, int b, int a) {
-        return ((((toConstraints(a) << 8 | toConstraints(r)) << 8) | toConstraints(g)) << 8) | toConstraints(b);
     }
 
     /**

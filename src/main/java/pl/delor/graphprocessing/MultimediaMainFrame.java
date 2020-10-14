@@ -5,11 +5,9 @@
  */
 package pl.delor.graphprocessing;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -17,6 +15,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import static pl.delor.graphprocessing.GP.copyImage;
+import static pl.delor.graphprocessing.GP.getFileExtension;
+import static pl.delor.graphprocessing.GP.getIconFromBase64;
+import static pl.delor.graphprocessing.GP.getImageExtension;
 
 /**
  *
@@ -46,37 +48,6 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         }
     }
 
-    public static ImageIcon getIconFromBase64(String s) {
-        byte[] imageBytes = Base64.getDecoder().decode(s.getBytes());
-        return new ImageIcon(imageBytes);
-    }
-public static BufferedImage copyImage(BufferedImage source) {
-        BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
-        Graphics g = b.createGraphics();
-        g.drawImage(source, 0, 0, null);
-        g.dispose();
-        return b;
-    }
-
-    private static String getFileExtension(File file) {
-        if (file == null) {
-            return "";
-        }
-        String name = file.getName();
-        int i = name.lastIndexOf('.');
-        String ext = i > 0 ? name.substring(i + 1) : "";
-        return ext;
-    }
-
-    private static String getImageExtension(String ext) {
-        ext = ext.toLowerCase();
-        switch (ext) {
-            case "jpg", "jpeg", "gif", "png" -> {
-                return ext;
-            }
-        }
-        return "jpeg";
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -252,7 +223,6 @@ public static BufferedImage copyImage(BufferedImage source) {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
 
     private void saveImage() {
         if (imageOutput == null) {
@@ -300,6 +270,9 @@ public static BufferedImage copyImage(BufferedImage source) {
     }
 
     private static void showPreviewPanel(MultimediaMainFrame mf, JPreviewPanel panel) {
+        if (mf == null || panel == null || mf.getImageOutput() == null) {
+            return;
+        }
         JPreview p = new JPreview(mf, mf.getImageOutput(), panel);
         if (p.getExitStatus() == JPreview.STATUS.OK) {
             mf.setChangedImage(p.getImageOutput());

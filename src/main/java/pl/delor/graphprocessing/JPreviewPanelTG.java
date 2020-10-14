@@ -6,10 +6,11 @@
 package pl.delor.graphprocessing;
 
 import java.awt.image.BufferedImage;
-import static pl.delor.graphprocessing.JPreview.getBlue;
-import static pl.delor.graphprocessing.JPreview.getGreen;
-import static pl.delor.graphprocessing.JPreview.getRed;
-import static pl.delor.graphprocessing.JPreview.toRGB;
+import static pl.delor.graphprocessing.GP.getBlue;
+import static pl.delor.graphprocessing.GP.getGreen;
+import static pl.delor.graphprocessing.GP.getRed;
+import static pl.delor.graphprocessing.GP.toRGB;
+
 
 /**
  *
