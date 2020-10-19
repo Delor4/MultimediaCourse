@@ -16,9 +16,13 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import static pl.delor.graphprocessing.GP.copyImage;
+import static pl.delor.graphprocessing.GP.getBlue;
 import static pl.delor.graphprocessing.GP.getFileExtension;
+import static pl.delor.graphprocessing.GP.getGreen;
 import static pl.delor.graphprocessing.GP.getIconFromBase64;
 import static pl.delor.graphprocessing.GP.getImageExtension;
+import static pl.delor.graphprocessing.GP.getRed;
+import static pl.delor.graphprocessing.GP.toRGB;
 
 /**
  *
@@ -72,6 +76,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuEdit = new javax.swing.JMenu();
         jMenuItemToGray = new javax.swing.JMenuItem();
         jMenuItemBrightness = new javax.swing.JMenuItem();
+        jMenuItemInvert = new javax.swing.JMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuItemAbout = new javax.swing.JMenuItem();
 
@@ -205,6 +210,14 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         });
         jMenuEdit.add(jMenuItemBrightness);
 
+        jMenuItemInvert.setText("Invert");
+        jMenuItemInvert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemInvertActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuItemInvert);
+
         jMenuBarMain.add(jMenuEdit);
 
         jMenuHelp.setText("Help");
@@ -306,13 +319,25 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jMenuItemExitActionPerformed
 
+    /* Simple panel */
     private void jMenuItemToGrayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemToGrayActionPerformed
         showPreviewPanel(this, new JPreviewPanelTG());
     }//GEN-LAST:event_jMenuItemToGrayActionPerformed
 
+    /* Panel with slider */
     private void jMenuItemBrightnessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemBrightnessActionPerformed
         showPreviewPanel(this, new JPreviewPanelBrightness());
     }//GEN-LAST:event_jMenuItemBrightnessActionPerformed
+
+    /* Simple panel with pixel processing in lambda expression */
+    private void jMenuItemInvertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemInvertActionPerformed
+        showPreviewPanel(this, new JPreviewPanelProcess("Invert", (pixel) -> {
+            int r = getRed(pixel);
+            int g = getGreen(pixel);
+            int b = getBlue(pixel);
+            return toRGB(255 - r, 255 - g, 255 - b);
+        }));
+    }//GEN-LAST:event_jMenuItemInvertActionPerformed
 
     /**
      * @param args the command line arguments
@@ -363,6 +388,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemAbout;
     private javax.swing.JMenuItem jMenuItemBrightness;
     private javax.swing.JMenuItem jMenuItemExit;
+    private javax.swing.JMenuItem jMenuItemInvert;
     private javax.swing.JMenuItem jMenuItemOpen;
     private javax.swing.JMenuItem jMenuItemSave;
     private javax.swing.JMenuItem jMenuItemToGray;

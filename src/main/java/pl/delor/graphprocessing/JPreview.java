@@ -15,6 +15,7 @@ import static pl.delor.graphprocessing.GP.copyImage;
  * @author delor
  */
 public class JPreview extends javax.swing.JDialog {
+    
 
     enum STATUS {
         NONE, OK, CANCEL
