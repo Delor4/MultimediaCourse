@@ -22,6 +22,7 @@ import static pl.delor.graphprocessing.GP.getGreen;
 import static pl.delor.graphprocessing.GP.getIconFromBase64;
 import static pl.delor.graphprocessing.GP.getImageExtension;
 import static pl.delor.graphprocessing.GP.getRed;
+import static pl.delor.graphprocessing.GP.toLuminance;
 import static pl.delor.graphprocessing.GP.toRGB;
 
 /**
@@ -77,6 +78,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuItemToGray = new javax.swing.JMenuItem();
         jMenuItemBrightness = new javax.swing.JMenuItem();
         jMenuItemInvert = new javax.swing.JMenuItem();
+        jMenuItemGrayscale = new javax.swing.JMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuItemAbout = new javax.swing.JMenuItem();
 
@@ -218,6 +220,14 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         });
         jMenuEdit.add(jMenuItemInvert);
 
+        jMenuItemGrayscale.setText("Grayscale");
+        jMenuItemGrayscale.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGrayscaleActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuItemGrayscale);
+
         jMenuBarMain.add(jMenuEdit);
 
         jMenuHelp.setText("Help");
@@ -339,6 +349,16 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         }));
     }//GEN-LAST:event_jMenuItemInvertActionPerformed
 
+    private void jMenuItemGrayscaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGrayscaleActionPerformed
+        showPreviewPanel(this, new JPreviewPanelProcess("Grayscale", (pixel) -> {
+            int r = getRed(pixel);
+            int g = getGreen(pixel);
+            int b = getBlue(pixel);
+            int luminance = toLuminance(r, g, b);
+            return toRGB(luminance, luminance, luminance);
+        }));
+    }//GEN-LAST:event_jMenuItemGrayscaleActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -388,6 +408,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemAbout;
     private javax.swing.JMenuItem jMenuItemBrightness;
     private javax.swing.JMenuItem jMenuItemExit;
+    private javax.swing.JMenuItem jMenuItemGrayscale;
     private javax.swing.JMenuItem jMenuItemInvert;
     private javax.swing.JMenuItem jMenuItemOpen;
     private javax.swing.JMenuItem jMenuItemSave;

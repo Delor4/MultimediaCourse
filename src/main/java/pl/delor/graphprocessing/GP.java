@@ -8,6 +8,7 @@ package pl.delor.graphprocessing;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import static java.lang.Math.pow;
 import java.util.Base64;
 import javax.swing.ImageIcon;
 
@@ -76,6 +77,41 @@ public class GP {
 
     public static int toARGB(int r, int g, int b, int a) {
         return ((((toConstraints(a) << 8 | toConstraints(r)) << 8) | toConstraints(g)) << 8) | toConstraints(b);
+    }
+
+    // sRGB luminance(Y) values
+    final static double rY = 0.212655;
+    final static double gY = 0.715158;
+    final static double bY = 0.072187;
+
+// Inverse of sRGB "gamma" function. (approx 2.2)
+    static double inv_gam_sRGB(int ic) {
+        double c = ic / 255.0;
+        if (c <= 0.04045) {
+            return c / 12.92;
+        } else {
+            return pow(((c + 0.055) / (1.055)), 2.4);
+        }
+    }
+
+// sRGB "gamma" function (approx 2.2)
+    static int gam_sRGB(double v) {
+        if (v <= 0.0031308) {
+            v *= 12.92;
+        } else {
+            v = 1.055 * pow(v, 1.0 / 2.4) - 0.055;
+        }
+        return (int) (v * 255 + 0.5); // This is correct in C++. Other languages may not
+        // require +0.5
+    }
+
+// GRAY VALUE ("brightness")
+    public static int toLuminance(int r, int g, int b) {
+        return gam_sRGB(
+                rY * inv_gam_sRGB(r)
+                + gY * inv_gam_sRGB(g)
+                + bY * inv_gam_sRGB(b)
+        );
     }
 
     /**
