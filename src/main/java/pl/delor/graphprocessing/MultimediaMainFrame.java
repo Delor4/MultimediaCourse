@@ -83,12 +83,13 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuItemExit = new javax.swing.JMenuItem();
         jMenuEdit = new javax.swing.JMenu();
         jMenuItemToGray = new javax.swing.JMenuItem();
+        jMenuItemGrayscale = new javax.swing.JMenuItem();
         jMenuItemBrightness = new javax.swing.JMenuItem();
         jMenuItemInvert = new javax.swing.JMenuItem();
-        jMenuItemGrayscale = new javax.swing.JMenuItem();
         jMenuItemPower = new javax.swing.JMenuItem();
         jMenuItemGamma = new javax.swing.JMenuItem();
         jMenuItemLog = new javax.swing.JMenuItem();
+        jMenuItemBinarization = new javax.swing.JMenuItem();
         jMenuStats = new javax.swing.JMenu();
         jCheckBoxMenuItemShowStats = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
@@ -214,13 +215,21 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
         jMenuEdit.setText("Edit");
 
-        jMenuItemToGray.setText("To gray");
+        jMenuItemToGray.setText("Grayscale (avg)");
         jMenuItemToGray.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemToGrayActionPerformed(evt);
             }
         });
         jMenuEdit.add(jMenuItemToGray);
+
+        jMenuItemGrayscale.setText("Grayscale (lum)");
+        jMenuItemGrayscale.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGrayscaleActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuItemGrayscale);
 
         jMenuItemBrightness.setText("Brightness");
         jMenuItemBrightness.addActionListener(new java.awt.event.ActionListener() {
@@ -237,14 +246,6 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
             }
         });
         jMenuEdit.add(jMenuItemInvert);
-
-        jMenuItemGrayscale.setText("Grayscale");
-        jMenuItemGrayscale.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemGrayscaleActionPerformed(evt);
-            }
-        });
-        jMenuEdit.add(jMenuItemGrayscale);
 
         jMenuItemPower.setText("Power");
         jMenuItemPower.addActionListener(new java.awt.event.ActionListener() {
@@ -269,6 +270,14 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
             }
         });
         jMenuEdit.add(jMenuItemLog);
+
+        jMenuItemBinarization.setText("Binarization");
+        jMenuItemBinarization.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemBinarizationActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuItemBinarization);
 
         jMenuBarMain.add(jMenuEdit);
 
@@ -494,6 +503,10 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         }));
     }//GEN-LAST:event_jMenuItemLogActionPerformed
 
+    private void jMenuItemBinarizationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemBinarizationActionPerformed
+        showPreviewPanel(this, new JPreviewPanelBinary());
+    }//GEN-LAST:event_jMenuItemBinarizationActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -542,6 +555,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenu jMenuHelp;
     private javax.swing.JMenuItem jMenuItemAbout;
+    private javax.swing.JMenuItem jMenuItemBinarization;
     private javax.swing.JMenuItem jMenuItemBrightness;
     private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JMenuItem jMenuItemGamma;
