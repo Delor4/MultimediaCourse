@@ -88,6 +88,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuItemGrayscale = new javax.swing.JMenuItem();
         jMenuItemPower = new javax.swing.JMenuItem();
         jMenuItemGamma = new javax.swing.JMenuItem();
+        jMenuItemLog = new javax.swing.JMenuItem();
         jMenuStats = new javax.swing.JMenu();
         jCheckBoxMenuItemShowStats = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
@@ -260,6 +261,14 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
             }
         });
         jMenuEdit.add(jMenuItemGamma);
+
+        jMenuItemLog.setText("Log");
+        jMenuItemLog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemLogActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuItemLog);
 
         jMenuBarMain.add(jMenuEdit);
 
@@ -475,6 +484,16 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         showPreviewPanel(this, new JPreviewPanelGamma());
     }//GEN-LAST:event_jMenuItemGammaActionPerformed
 
+    private void jMenuItemLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLogActionPerformed
+        double l_256 = Math.log(1+255); 
+        showPreviewPanel(this, new JPreviewPanelProcess("Logarithm", (pixel) -> {
+            int r = (int)(255 * Math.log(getRed(pixel))/l_256);
+            int g = (int)(255 * Math.log(getGreen(pixel))/l_256);
+            int b = (int)(255 * Math.log(getBlue(pixel))/l_256);
+            return toRGB(r, g, b);
+        }));
+    }//GEN-LAST:event_jMenuItemLogActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -528,6 +547,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemGamma;
     private javax.swing.JMenuItem jMenuItemGrayscale;
     private javax.swing.JMenuItem jMenuItemInvert;
+    private javax.swing.JMenuItem jMenuItemLog;
     private javax.swing.JMenuItem jMenuItemOpen;
     private javax.swing.JMenuItem jMenuItemPower;
     private javax.swing.JMenuItem jMenuItemSave;
