@@ -51,6 +51,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
             ImageIcon img = getIconFromBase64(appIconString);
             setIconImage(img.getImage());
         }
+        jCheckBoxMenuItemShowStats.setState(false);
     }
 
     /**
@@ -66,8 +67,14 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         fileChooserLoad = new javax.swing.JFileChooser("./");
         fileChooserSave = new javax.swing.JFileChooser("./");
         jImageSource = new pl.delor.graphprocessing.JImage();
+        statsSourceAvg = new javax.swing.JLabel();
+        statsSourceCv = new javax.swing.JLabel();
+        statsSourceCd = new javax.swing.JLabel();
         jPanelSeparator = new javax.swing.JPanel();
         jImageChanged = new pl.delor.graphprocessing.JImage();
+        statsChangedAvg = new javax.swing.JLabel();
+        statsChangedCv = new javax.swing.JLabel();
+        statsChangedCd = new javax.swing.JLabel();
         jButtonOpen = new javax.swing.JButton();
         jMenuBarMain = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
@@ -79,6 +86,8 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuItemBrightness = new javax.swing.JMenuItem();
         jMenuItemInvert = new javax.swing.JMenuItem();
         jMenuItemGrayscale = new javax.swing.JMenuItem();
+        jMenuStats = new javax.swing.JMenu();
+        jCheckBoxMenuItemShowStats = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuItemAbout = new javax.swing.JMenuItem();
 
@@ -87,17 +96,20 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jImageSource.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jImageSource.setMinimumSize(new java.awt.Dimension(100, 182));
+        jImageSource.setLayout(new java.awt.GridLayout(10, 0));
 
-        javax.swing.GroupLayout jImageSourceLayout = new javax.swing.GroupLayout(jImageSource);
-        jImageSource.setLayout(jImageSourceLayout);
-        jImageSourceLayout.setHorizontalGroup(
-            jImageSourceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 261, Short.MAX_VALUE)
-        );
-        jImageSourceLayout.setVerticalGroup(
-            jImageSourceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 261, Short.MAX_VALUE)
-        );
+        statsSourceAvg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        statsSourceAvg.setText("jLabel1");
+        jImageSource.add(statsSourceAvg);
+
+        statsSourceCv.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        statsSourceCv.setText("jLabel1");
+        jImageSource.add(statsSourceCv);
+
+        statsSourceCd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        statsSourceCd.setText("jLabel1");
+        jImageSource.add(statsSourceCd);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -130,17 +142,20 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         getContentPane().add(jPanelSeparator, gridBagConstraints);
 
         jImageChanged.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jImageChanged.setMinimumSize(new java.awt.Dimension(100, 182));
+        jImageChanged.setLayout(new java.awt.GridLayout(10, 0));
 
-        javax.swing.GroupLayout jImageChangedLayout = new javax.swing.GroupLayout(jImageChanged);
-        jImageChanged.setLayout(jImageChangedLayout);
-        jImageChangedLayout.setHorizontalGroup(
-            jImageChangedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 261, Short.MAX_VALUE)
-        );
-        jImageChangedLayout.setVerticalGroup(
-            jImageChangedLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 261, Short.MAX_VALUE)
-        );
+        statsChangedAvg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        statsChangedAvg.setText("jLabel2");
+        jImageChanged.add(statsChangedAvg);
+
+        statsChangedCv.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        statsChangedCv.setText("jLabel1");
+        jImageChanged.add(statsChangedCv);
+
+        statsChangedCd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        statsChangedCd.setText("jLabel1");
+        jImageChanged.add(statsChangedCd);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -230,6 +245,24 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
         jMenuBarMain.add(jMenuEdit);
 
+        jMenuStats.setText("Stats");
+
+        jCheckBoxMenuItemShowStats.setSelected(true);
+        jCheckBoxMenuItemShowStats.setText("Show stats");
+        jCheckBoxMenuItemShowStats.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jCheckBoxMenuItemShowStatsStateChanged(evt);
+            }
+        });
+        jCheckBoxMenuItemShowStats.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItemShowStatsActionPerformed(evt);
+            }
+        });
+        jMenuStats.add(jCheckBoxMenuItemShowStats);
+
+        jMenuBarMain.add(jMenuStats);
+
         jMenuHelp.setText("Help");
 
         jMenuItemAbout.setText("About");
@@ -290,15 +323,17 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(MultimediaMainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+        updateStatsLabels();
     }
 
-    private static void showPreviewPanel(MultimediaMainFrame mf, JPreviewPanel panel) {
+    private void showPreviewPanel(MultimediaMainFrame mf, JPreviewPanel panel) {
         if (mf == null || panel == null || mf.getImageOutput() == null) {
             return;
         }
         JPreview p = new JPreview(mf, mf.getImageOutput(), panel);
         if (p.getExitStatus() == JPreview.STATUS.OK) {
             mf.setChangedImage(p.getImageOutput());
+            updateStatsLabels();
         }
         p.dispose();
     }
@@ -307,6 +342,53 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         imageOutput = image;
         jImageChanged.setImage(image);
         edited = true;
+    }
+    
+    String[] getFormatedStats(JImage image){
+        Integer avg = image.getAvgBrightness();
+        String[] out = {"", "", ""};
+        if(avg == null) {
+            out[0] = "Load some image.";
+            return out;
+        }
+
+        out[0] = String.format("Avg brightness: (%d, %d, %d)", getRed(avg), getGreen(avg), getBlue(avg));
+
+        int cv = image.getContrastVariance();
+        out[1] = String.format("contrast variance: (%d, %d, %d)", getRed(cv), getGreen(cv), getBlue(cv));
+        
+        int cd = image.getContrastDynamic();
+        out[2] = String.format("contrast dynamic: (%d, %d, %d)", getRed(cd), getGreen(cd), getBlue(cd));
+        
+        return out;
+    }
+    
+    private void updateStatsLabels(){
+        if(jCheckBoxMenuItemShowStats.isSelected()){
+           
+            String[] s = getFormatedStats(jImageSource);
+            statsSourceAvg.setText(s[0]);
+            statsSourceAvg.setVisible(true);
+            statsSourceCv.setText(s[1]);
+            statsSourceCv.setVisible(true);
+            statsSourceCd.setText(s[2]);
+            statsSourceCd.setVisible(true);
+            
+            s = getFormatedStats(jImageChanged);
+            statsChangedAvg.setText(s[0]);
+            statsChangedAvg.setVisible(true);
+            statsChangedCv.setText(s[1]);
+            statsChangedCv.setVisible(true);
+            statsChangedCd.setText(s[2]);
+            statsChangedCd.setVisible(true);
+        }else{
+            statsSourceAvg.setVisible(false);
+            statsSourceCv.setVisible(false);
+            statsSourceCd.setVisible(false);
+            statsChangedAvg.setVisible(false);
+            statsChangedCv.setVisible(false);
+            statsChangedCd.setVisible(false);
+        }
     }
     private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
         loadImage();
@@ -359,6 +441,14 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         }));
     }//GEN-LAST:event_jMenuItemGrayscaleActionPerformed
 
+    private void jCheckBoxMenuItemShowStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemShowStatsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxMenuItemShowStatsActionPerformed
+
+    private void jCheckBoxMenuItemShowStatsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemShowStatsStateChanged
+        updateStatsLabels();
+    }//GEN-LAST:event_jCheckBoxMenuItemShowStatsStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -399,6 +489,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JFileChooser fileChooserLoad;
     private javax.swing.JFileChooser fileChooserSave;
     private javax.swing.JButton jButtonOpen;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemShowStats;
     private pl.delor.graphprocessing.JImage jImageChanged;
     private pl.delor.graphprocessing.JImage jImageSource;
     private javax.swing.JMenuBar jMenuBarMain;
@@ -413,6 +504,13 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemOpen;
     private javax.swing.JMenuItem jMenuItemSave;
     private javax.swing.JMenuItem jMenuItemToGray;
+    private javax.swing.JMenu jMenuStats;
     private javax.swing.JPanel jPanelSeparator;
+    private javax.swing.JLabel statsChangedAvg;
+    private javax.swing.JLabel statsChangedCd;
+    private javax.swing.JLabel statsChangedCv;
+    private javax.swing.JLabel statsSourceAvg;
+    private javax.swing.JLabel statsSourceCd;
+    private javax.swing.JLabel statsSourceCv;
     // End of variables declaration//GEN-END:variables
 }

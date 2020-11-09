@@ -8,6 +8,10 @@ package pl.delor.graphprocessing;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import static pl.delor.graphprocessing.GP.getBlue;
+import static pl.delor.graphprocessing.GP.getGreen;
+import static pl.delor.graphprocessing.GP.getRed;
+import static pl.delor.graphprocessing.GP.toRGB;
 
 /**
  *
@@ -19,6 +23,39 @@ public class JImage extends javax.swing.JPanel {
      * Creates new form JImage
      */
     private BufferedImage image = null;
+    private Integer avgBrightness = null;
+    private Integer contrastVariance = null;
+    private Integer contrastDynamic = null;
+
+    public Integer getAvgBrightness() {
+        if (image == null) {
+            return null;
+        }
+        if (avgBrightness == null) {
+            calculateAvgBrightness();
+        }
+        return avgBrightness;
+    }
+
+    public Integer getContrastVariance() {
+        if (image == null) {
+            return null;
+        }
+        if (contrastVariance == null) {
+            calculateContrastVariance();
+        }
+        return contrastVariance;
+    }
+
+    public Integer getContrastDynamic() {
+        if (image == null) {
+            return null;
+        }
+        if (contrastDynamic == null) {
+            calculateContrastDynamic();
+        }
+        return contrastDynamic;
+    }
 
     public JImage() {
         initComponents();
@@ -30,6 +67,9 @@ public class JImage extends javax.swing.JPanel {
 
     public void setImage(BufferedImage image) {
         this.image = image;
+        this.avgBrightness = null;
+        this.contrastVariance = null;
+        this.contrastDynamic = null;
         this.repaint();
     }
 
@@ -37,10 +77,88 @@ public class JImage extends javax.swing.JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (image != null) {
-            Image imageResized = image.getScaledInstance(this.getWidth(), this.getHeight(),
-                    java.awt.Image.SCALE_SMOOTH);
-            g.drawImage(imageResized, 0, 0, this); // see javadoc for more info on the parameters            
+            Image imageResized = image.getScaledInstance(
+                    this.getWidth(),
+                    this.getHeight(),
+                    java.awt.Image.SCALE_SMOOTH
+            );
+            g.drawImage(imageResized, 0, 0, this);        
         }
+    }
+
+    private void calculateAvgBrightness() {
+        long sumRed = 0;
+        long sumGreen = 0;
+        long sumBlue = 0;
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                int pixel = image.getRGB(x, y);
+                sumRed += getRed(pixel);
+                sumGreen += getGreen(pixel);
+                sumBlue += getBlue(pixel);
+            }
+        }
+        long pixels = image.getHeight() * image.getWidth();
+        avgBrightness = toRGB(
+                (int) (sumRed / pixels),
+                (int) (sumGreen / pixels),
+                (int) (sumBlue / pixels)
+        );
+    }
+
+    private void calculateContrastVariance() {
+        if (avgBrightness == null) {
+            calculateAvgBrightness();
+        }
+
+        long sumRed = 0;
+        int avgRed = getRed(avgBrightness);
+        long sumGreen = 0;
+        int avgGreen = getGreen(avgBrightness);
+        long sumBlue = 0;
+        int avgBlue = getBlue(avgBrightness);
+
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                int pixel = image.getRGB(x, y);
+                sumRed += (getRed(pixel) - avgRed) * (getRed(pixel) - avgRed);
+                sumGreen += (getGreen(pixel) - avgGreen) * (getGreen(pixel) - avgGreen);
+                sumBlue += (getBlue(pixel) - avgBlue) * (getBlue(pixel) - avgBlue);
+            }
+        }
+        long pixels = image.getHeight() * image.getWidth();
+        contrastVariance = toRGB(
+                (int) Math.sqrt(sumRed / pixels),
+                (int) Math.sqrt(sumGreen / pixels),
+                (int) Math.sqrt(sumBlue / pixels)
+        );
+    }
+
+    private void calculateContrastDynamic() {
+        int maxRed = 0;
+        int maxGreen = 0;
+        int maxBlue = 0;
+        int minRed = 255;
+        int minGreen = 255;
+        int minBlue = 255;
+
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                int pixel = image.getRGB(x, y);
+                int red = getRed(pixel);
+                maxRed = maxRed < red ? red : maxRed;
+                minRed = minRed > red ? red : minRed;
+
+                int g = getGreen(pixel);
+                maxGreen = maxGreen < g ? g : maxGreen;
+                minGreen = minGreen > g ? g : minGreen;
+
+                int b = getBlue(pixel);
+                maxBlue = maxBlue < b ? b : maxBlue;
+                minBlue = minBlue > b ? b : minBlue;
+            }
+        }
+        contrastDynamic = toRGB((maxRed - minRed), (maxGreen - minGreen), (maxBlue - minBlue));
     }
 
     /**
