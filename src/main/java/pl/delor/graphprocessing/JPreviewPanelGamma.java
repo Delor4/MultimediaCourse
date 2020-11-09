@@ -14,12 +14,12 @@ import static pl.delor.graphprocessing.GP.toRGB;
  *
  * @author delor
  */
-public class JPreviewPanelPower extends JPreviewPanel {
+public class JPreviewPanelGamma extends JPreviewPanel {
 
     /**
      * Creates new form JPreviewPanelPower
      */
-    public JPreviewPanelPower() {
+    public JPreviewPanelGamma() {
         initComponents();
     }
 
@@ -64,7 +64,7 @@ public class JPreviewPanelPower extends JPreviewPanel {
 
     @Override
     protected String title() {
-        return "Raising to power";
+        return "Gamma correction";
     }
 
     @Override
@@ -73,9 +73,9 @@ public class JPreviewPanelPower extends JPreviewPanel {
         for (int y = 0; y < input.getHeight(); y++) {
             for (int x = 0; x < input.getWidth(); x++) {
                 int pixel = input.getRGB(x, y);
-                int r = (int)(255 * Math.pow(getRed(pixel)/255.0, p));
-                int g = (int)(255 * Math.pow(getGreen(pixel)/255.0, p));
-                int b = (int)(255 * Math.pow(getBlue(pixel)/255.0, p));
+                int r = (int)(255 * Math.pow(getRed(pixel)/255.0, 1.0/p));
+                int g = (int)(255 * Math.pow(getGreen(pixel)/255.0, 1.0/p));
+                int b = (int)(255 * Math.pow(getBlue(pixel)/255.0, 1.0/p));
 
                 output.setRGB(x, y, toRGB(r, g, b));
             }

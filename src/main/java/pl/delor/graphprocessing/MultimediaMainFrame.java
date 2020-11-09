@@ -87,6 +87,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuItemInvert = new javax.swing.JMenuItem();
         jMenuItemGrayscale = new javax.swing.JMenuItem();
         jMenuItemPower = new javax.swing.JMenuItem();
+        jMenuItemGamma = new javax.swing.JMenuItem();
         jMenuStats = new javax.swing.JMenu();
         jCheckBoxMenuItemShowStats = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
@@ -251,6 +252,14 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
             }
         });
         jMenuEdit.add(jMenuItemPower);
+
+        jMenuItemGamma.setText("Gamma");
+        jMenuItemGamma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGammaActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuItemGamma);
 
         jMenuBarMain.add(jMenuEdit);
 
@@ -462,6 +471,10 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         showPreviewPanel(this, new JPreviewPanelPower());
     }//GEN-LAST:event_jMenuItemPowerActionPerformed
 
+    private void jMenuItemGammaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGammaActionPerformed
+        showPreviewPanel(this, new JPreviewPanelGamma());
+    }//GEN-LAST:event_jMenuItemGammaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -512,6 +525,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemAbout;
     private javax.swing.JMenuItem jMenuItemBrightness;
     private javax.swing.JMenuItem jMenuItemExit;
+    private javax.swing.JMenuItem jMenuItemGamma;
     private javax.swing.JMenuItem jMenuItemGrayscale;
     private javax.swing.JMenuItem jMenuItemInvert;
     private javax.swing.JMenuItem jMenuItemOpen;
