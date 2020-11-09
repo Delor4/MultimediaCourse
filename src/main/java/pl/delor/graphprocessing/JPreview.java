@@ -102,7 +102,7 @@ public class JPreview extends javax.swing.JDialog {
         );
         jImagePreviewLayout.setVerticalGroup(
             jImagePreviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 280, Short.MAX_VALUE)
+            .addGap(0, 285, Short.MAX_VALUE)
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -114,6 +114,8 @@ public class JPreview extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         getContentPane().add(jImagePreview, gridBagConstraints);
+
+        jPanelParameters.setLayout(new java.awt.GridLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;

@@ -23,20 +23,18 @@
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
   <SubComponents>
-    <Component class="javax.swing.JSlider" name="jSliderBrightness">
+    <Component class="javax.swing.JSlider" name="jSliderPower">
       <Properties>
-        <Property name="majorTickSpacing" type="int" value="255"/>
-        <Property name="maximum" type="int" value="255"/>
-        <Property name="minimum" type="int" value="-255"/>
-        <Property name="minorTickSpacing" type="int" value="15"/>
+        <Property name="majorTickSpacing" type="int" value="1"/>
+        <Property name="maximum" type="int" value="5"/>
+        <Property name="minimum" type="int" value="1"/>
         <Property name="paintLabels" type="boolean" value="true"/>
         <Property name="paintTicks" type="boolean" value="true"/>
-        <Property name="value" type="int" value="0"/>
         <Property name="requestFocusEnabled" type="boolean" value="false"/>
         <Property name="valueIsAdjusting" type="boolean" value="true"/>
       </Properties>
       <Events>
-        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSliderBrightnessStateChanged"/>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSliderPowerStateChanged"/>
       </Events>
     </Component>
   </SubComponents>

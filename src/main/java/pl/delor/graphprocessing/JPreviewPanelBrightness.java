@@ -4,13 +4,15 @@
  * and open the template in the editor.
  */
 package pl.delor.graphprocessing;
-
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.awt.image.BufferedImage;
 import static pl.delor.graphprocessing.GP.getBlue;
 import static pl.delor.graphprocessing.GP.getGreen;
 import static pl.delor.graphprocessing.GP.getRed;
 import static pl.delor.graphprocessing.GP.toRGB;
-
+import java.awt.Component;
+import javax.swing.JLabel;
 /**
  *
  * @author delor
@@ -18,10 +20,21 @@ import static pl.delor.graphprocessing.GP.toRGB;
 public class JPreviewPanelBrightness extends JPreviewPanel {
 
     /**
-     * Creates new form JPreviewPanelTest
+     * Creates new form JPreviewPanelBrightness
      */
     public JPreviewPanelBrightness() {
         initComponents();
+        
+        Dictionary<Integer, Component> labelTable = new Hashtable<Integer, Component>();
+      labelTable.put(-255, new JLabel("Min"));
+      labelTable.put(-200, new JLabel("-200"));
+      labelTable.put(-100, new JLabel("-100"));
+      labelTable.put(0, new JLabel("0"));
+      labelTable.put(100, new JLabel("100"));
+      labelTable.put(200, new JLabel("200"));
+      labelTable.put(255, new JLabel("Max"));
+
+      jSliderBrightness.setLabelTable(labelTable);
     }
 
     /**
@@ -36,18 +49,23 @@ public class JPreviewPanelBrightness extends JPreviewPanel {
         jSliderBrightness = new javax.swing.JSlider();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        setName(""); // NOI18N
-        setLayout(new java.awt.BorderLayout());
+        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
 
+        jSliderBrightness.setMajorTickSpacing(255);
         jSliderBrightness.setMaximum(255);
         jSliderBrightness.setMinimum(-255);
+        jSliderBrightness.setMinorTickSpacing(15);
+        jSliderBrightness.setPaintLabels(true);
+        jSliderBrightness.setPaintTicks(true);
         jSliderBrightness.setValue(0);
+        jSliderBrightness.setRequestFocusEnabled(false);
+        jSliderBrightness.setValueIsAdjusting(true);
         jSliderBrightness.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSliderBrightnessStateChanged(evt);
             }
         });
-        add(jSliderBrightness, java.awt.BorderLayout.CENTER);
+        add(jSliderBrightness);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jSliderBrightnessStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSliderBrightnessStateChanged
@@ -61,7 +79,7 @@ public class JPreviewPanelBrightness extends JPreviewPanel {
 
     @Override
     protected String title() {
-        return "Test!";
+        return "Changing brightness";
     }
 
     @Override
