@@ -8,8 +8,11 @@ package pl.delor.graphprocessing;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -24,6 +27,8 @@ import static pl.delor.graphprocessing.GP.getImageExtension;
 import static pl.delor.graphprocessing.GP.getRed;
 import static pl.delor.graphprocessing.GP.toLuminance;
 import static pl.delor.graphprocessing.GP.toRGB;
+import javax.swing.*;    
+import java.awt.event.*;    
 
 /**
  *
@@ -41,18 +46,191 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     Boolean edited = false;
 
     private final String appIconString = "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAB3RJTUUH5AoNBxcXesQknAAAAAlwSFlzAAAu4AAALuABDw7X4QAAAARnQU1BAACxjwv8YQUAAABRUExURQAAAGZmZjMzM2YzAMzM/zOZ/2ZmmczMzJlmM/+ZM//Mmf/MZv+ZAP/MM8zMmf9mADOZzMyZZpmZmWaZzMyZM8yZmZlmAMyZAJkzAMyZzMxmADlTPGMAAAABdFJOUwBA5thmAAABLUlEQVR42u3U2Q6CMBAF0FJbK7sbuPz/hwqWaQHTMItveh8ICemxvQwq9UupKun6MSKgHSIwPNAKgFYGbG5gtxEAbkzgDsBT84AeKui1ZgE3qGCndZYETDKuhgqYQFcJgVOogAnACao7D3B5OAEPeIQpYAIlnKBnArMKWICLL5EHNAD0TOAU5hgJWLsE4CXWWGAQ5kSooKQAM6GDOe7QwFuwHxU4PLDYwxUqoALW31yggtwQgEkYL2eooCEBXhgTK+ABxzycgAaAEOa4JAKwgxKAgg/4OBIQKrTD39k7tSEAdp7GAwUBgKXTMIyHqJ1BA/G3p3t3yAv/iAbEedw7QwDi6vVXiQOWS3jAahoMFTAyYBUxYMTAIj8AoPIH0oBSGpsUgCbSgMpwUf98Ny9G+CvZvnzSbwAAAABJRU5ErkJggg==";
-
+    
+    Map<String, int[][]> filters = new HashMap<>();
+    
     /**
      * Creates new form MultimediaMainFrame
      */
     public MultimediaMainFrame() {
         initComponents();
+        addAllMenus();
         if (appIconString != null) {
             ImageIcon img = getIconFromBase64(appIconString);
             setIconImage(img.getImage());
         }
         jCheckBoxMenuItemShowStats.setState(false);
     }
+    
+    private JMenuItem makeFilterMenuItem(String name, int[][] filter){
+       JMenuItem item = new JMenuItem(name);
+       filters.put(name, filter);
+       item.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFilterActionPerformed(evt, name);
+            }
+        });
+       return item;
+    }
+    
+    private JMenu makePrevittMenu(){
+        JMenu menu = new JMenu("Previtt");
+        menu.add(makeFilterMenuItem("Previtt N Filter", new int[][]{
+        {1, 1, 1},
+        {0, 0, 0},
+        {-1, -1, -1},
+    }));
+        menu.add(makeFilterMenuItem("Previtt NE Filter", new int[][]{
+        {0, 1, 1},
+        {-1, 0, 1},
+        {-1, -1, 0},
+    }));
+        menu.add(makeFilterMenuItem("Previtt E Filter", new int[][]{
+        {-1, 0, 1},
+        {-1, 0, 1},
+        {-1, 0, 1},
+    }));
+        menu.add(makeFilterMenuItem("Previtt SE Filter", new int[][]{
+        {-1, -1, 0},
+        {-1, 0, 1},
+        {0, 1, 1},
+    }));
+        menu.add(makeFilterMenuItem("Previtt S Filter", new int[][]{
+        {-1, -1, -1},
+        {0, 0, 0},
+        {1, 1, 1},
+    }));
+        menu.add(makeFilterMenuItem("Previtt SW Filter", new int[][]{
+        {0, -1, -1},
+        {1, 0, -1},
+        {1, 1, 0},
+    }));
+        menu.add(makeFilterMenuItem("Previtt W Filter", new int[][]{
+        {1, 0, -1},
+        {1, 0, -1},
+        {1, 0, -1},
+    }));
+        menu.add(makeFilterMenuItem("Previtt NW Filter", new int[][]{
+        {1, 1, 0},
+        {1, 0, -1},
+        {0, -1, -1},
+    }));
+        return menu;
+    }
+    private JMenu makeSobelMenu(){
+        JMenu menu = new JMenu("Sobel");
+        menu.add(makeFilterMenuItem("Sobel N Filter", new int[][]{
+        {1, 2, 1},
+        {0, 0, 0},
+        {-1, -2, -1},
+    }));
+        menu.add(makeFilterMenuItem("Sobel NE Filter", new int[][]{
+        {0, 1, 2},
+        {-1, 0, 1},
+        {-2, -1, 0},
+    }));
+        menu.add(makeFilterMenuItem("Sobel E Filter", new int[][]{
+        {-1, 0, 1},
+        {-2, 0, 2},
+        {-1, 0, 1},
+    }));
+        menu.add(makeFilterMenuItem("Sobel SE Filter", new int[][]{
+        {-2, -1, 0},
+        {-1, 0, 1},
+        {0, 1, 2},
+    }));
+        menu.add(makeFilterMenuItem("Sobel S Filter", new int[][]{
+        {-1, -2, -1},
+        {0, 0, 0},
+        {1, 2, 1},
+    }));
+        menu.add(makeFilterMenuItem("Sobel SW Filter", new int[][]{
+        {0, -1, -2},
+        {1, 0, -1},
+        {2, 1, 0},
+    }));
+        menu.add(makeFilterMenuItem("Sobel W Filter", new int[][]{
+        {1, 0, -1},
+        {2, 0, -2},
+        {1, 0, -1},
+    }));
+        menu.add(makeFilterMenuItem("Sobel NW Filter", new int[][]{
+        {2, 1, 0},
+        {1, 0, -1},
+        {0, -1, -2},
+    }));
+        return menu;
+    }
+    private JMenu makeBlurMenu(){
+        JMenu menu = new JMenu("Blur");
+        menu.add(makeFilterMenuItem("Blur Filter 1", new int[][]{
+        {1, 1, 1},
+        {1, 1, 1},
+        {1, 1, 1},
+    }));
+        menu.add(makeFilterMenuItem("Blur Filter 2", new int[][]{
+        {1, 1, 1},
+        {1, 2, 1},
+        {1, 1, 1},
+    }));
+        menu.add(makeFilterMenuItem("Blur Filter 4", new int[][]{
+        {1, 1, 1},
+        {1, 4, 1},
+        {1, 1, 1},
+    }));
+      menu.add(makeFilterMenuItem("Blur Filter 12", new int[][]{
+        {1, 1, 1},
+        {1, 12, 1},
+        {1, 1, 1},
+    }));
+      menu.add(makeFilterMenuItem("Gauss Filter 1", new int[][]{
+        {1, 2, 1},
+        {2, 4, 2},
+        {1, 2, 1},
+    }));
+      menu.add(makeFilterMenuItem("Gauss Filter 2", new int[][]{
+        {1, 3, 1},
+        {3, 9, 3},
+        {1, 3, 1},
+    }));
+      menu.add(makeFilterMenuItem("Gauss Filter 3", new int[][]{
+        {1, 4, 1},
+        {4, 16, 4},
+        {1, 4, 1},
+    }));
+      menu.add(makeFilterMenuItem("Gauss Filter 4", new int[][]{
+        {1, 4, 1},
+        {4, 12, 4},
+        {1, 4, 1},
+    }));
+      menu.add(makeFilterMenuItem("Gauss Filter 5", new int[][]{
+        {1, 3, 1},
+        {3, 16, 3},
+        {1, 3, 1},
+    }));
+        return menu;
+    }
+     private JMenu makeSharpMenu(){
+        JMenu menu = new JMenu("Sharp");
+        menu.add(makeFilterMenuItem("Sharp Filter 1", new int[][]{
+        {0, -2, 0},
+        {-2, 11, -2},
+        {0, -2, 0},
+    }));
+      menu.add(makeFilterMenuItem("Sharp Filter 2", new int[][]{
+        {0, -1, 0},
+        {-1, 5, -1},
+        {0, -1, 0},
+    }));
+        return menu;
+    }
+    private void addAllMenus(){
+        jSubMenuMenuFilters.add(makePrevittMenu());
+        jSubMenuMenuFilters.add(makeSobelMenu());
+        jSubMenuMenuFilters.add(makeBlurMenu());
+        jSubMenuMenuFilters.add(makeSharpMenu());
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -82,6 +260,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuItemSave = new javax.swing.JMenuItem();
         jMenuItemExit = new javax.swing.JMenuItem();
         jMenuEdit = new javax.swing.JMenu();
+        jSubMenuPixelManip = new javax.swing.JMenu();
         jMenuItemToGray = new javax.swing.JMenuItem();
         jMenuItemGrayscale = new javax.swing.JMenuItem();
         jMenuItemBrightness = new javax.swing.JMenuItem();
@@ -90,6 +269,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuItemGamma = new javax.swing.JMenuItem();
         jMenuItemLog = new javax.swing.JMenuItem();
         jMenuItemBinarization = new javax.swing.JMenuItem();
+        jSubMenuMenuFilters = new javax.swing.JMenu();
         jMenuStats = new javax.swing.JMenu();
         jCheckBoxMenuItemShowStats = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
@@ -97,6 +277,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Graphics processing");
+        setPreferredSize(new java.awt.Dimension(717, 415));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jImageSource.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -215,13 +396,15 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
         jMenuEdit.setText("Edit");
 
+        jSubMenuPixelManip.setText("Pixel manipulations");
+
         jMenuItemToGray.setText("Grayscale (avg)");
         jMenuItemToGray.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemToGrayActionPerformed(evt);
             }
         });
-        jMenuEdit.add(jMenuItemToGray);
+        jSubMenuPixelManip.add(jMenuItemToGray);
 
         jMenuItemGrayscale.setText("Grayscale (lum)");
         jMenuItemGrayscale.addActionListener(new java.awt.event.ActionListener() {
@@ -229,7 +412,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
                 jMenuItemGrayscaleActionPerformed(evt);
             }
         });
-        jMenuEdit.add(jMenuItemGrayscale);
+        jSubMenuPixelManip.add(jMenuItemGrayscale);
 
         jMenuItemBrightness.setText("Brightness");
         jMenuItemBrightness.addActionListener(new java.awt.event.ActionListener() {
@@ -237,7 +420,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
                 jMenuItemBrightnessActionPerformed(evt);
             }
         });
-        jMenuEdit.add(jMenuItemBrightness);
+        jSubMenuPixelManip.add(jMenuItemBrightness);
 
         jMenuItemInvert.setText("Invert");
         jMenuItemInvert.addActionListener(new java.awt.event.ActionListener() {
@@ -245,7 +428,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
                 jMenuItemInvertActionPerformed(evt);
             }
         });
-        jMenuEdit.add(jMenuItemInvert);
+        jSubMenuPixelManip.add(jMenuItemInvert);
 
         jMenuItemPower.setText("Power");
         jMenuItemPower.addActionListener(new java.awt.event.ActionListener() {
@@ -253,7 +436,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
                 jMenuItemPowerActionPerformed(evt);
             }
         });
-        jMenuEdit.add(jMenuItemPower);
+        jSubMenuPixelManip.add(jMenuItemPower);
 
         jMenuItemGamma.setText("Gamma");
         jMenuItemGamma.addActionListener(new java.awt.event.ActionListener() {
@@ -261,7 +444,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
                 jMenuItemGammaActionPerformed(evt);
             }
         });
-        jMenuEdit.add(jMenuItemGamma);
+        jSubMenuPixelManip.add(jMenuItemGamma);
 
         jMenuItemLog.setText("Log");
         jMenuItemLog.addActionListener(new java.awt.event.ActionListener() {
@@ -269,7 +452,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
                 jMenuItemLogActionPerformed(evt);
             }
         });
-        jMenuEdit.add(jMenuItemLog);
+        jSubMenuPixelManip.add(jMenuItemLog);
 
         jMenuItemBinarization.setText("Binarization");
         jMenuItemBinarization.addActionListener(new java.awt.event.ActionListener() {
@@ -277,7 +460,12 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
                 jMenuItemBinarizationActionPerformed(evt);
             }
         });
-        jMenuEdit.add(jMenuItemBinarization);
+        jSubMenuPixelManip.add(jMenuItemBinarization);
+
+        jMenuEdit.add(jSubMenuPixelManip);
+
+        jSubMenuMenuFilters.setText("Filters");
+        jMenuEdit.add(jSubMenuMenuFilters);
 
         jMenuBarMain.add(jMenuEdit);
 
@@ -506,7 +694,9 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private void jMenuItemBinarizationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemBinarizationActionPerformed
         showPreviewPanel(this, new JPreviewPanelBinary());
     }//GEN-LAST:event_jMenuItemBinarizationActionPerformed
-
+    private void jMenuItemFilterActionPerformed(java.awt.event.ActionEvent evt, String name) {
+        showPreviewPanel(this, new JPreviewPanelFilter(name, filters.get(name)));
+    } 
     /**
      * @param args the command line arguments
      */
@@ -568,6 +758,8 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemToGray;
     private javax.swing.JMenu jMenuStats;
     private javax.swing.JPanel jPanelSeparator;
+    private javax.swing.JMenu jSubMenuMenuFilters;
+    private javax.swing.JMenu jSubMenuPixelManip;
     private javax.swing.JLabel statsChangedAvg;
     private javax.swing.JLabel statsChangedCd;
     private javax.swing.JLabel statsChangedCv;
