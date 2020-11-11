@@ -36,7 +36,7 @@ public class JPreviewPanelFilter extends JPreviewPanel {
     private int _w = 0;
     private int _h = 0;
 
-    private void initProcessing() {
+    private void initProcessing(BufferedImage input) {
         int w = 0;
         for (int i = 0; i < filter.length; i++) {
             for (int j = 0; j < filter[i].length; j++) {
@@ -76,7 +76,7 @@ public class JPreviewPanelFilter extends JPreviewPanel {
 
     @Override
     protected BufferedImage doProcessImage(BufferedImage input, BufferedImage output) {
-        initProcessing();
+        initProcessing(input);
         for (int y = 0; y < input.getHeight(); y++) {
             for (int x = 0; x < input.getWidth(); x++) {
                 output.setRGB(x, y, applyFilter(x, y, input));

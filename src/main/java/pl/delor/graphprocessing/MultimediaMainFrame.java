@@ -169,16 +169,32 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         {1, 1, 1},
     }));
         menu.add(makeFilterMenuItem("Blur Filter 2", new int[][]{
+        {1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1},
+    }));
+        menu.add(makeFilterMenuItem("Blur Filter 3", new int[][]{
+        {1, 1, 1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1, 1, 1},
+    }));
+        menu.add(makeFilterMenuItem("Blur Filter 4", new int[][]{
         {1, 1, 1},
         {1, 2, 1},
         {1, 1, 1},
     }));
-        menu.add(makeFilterMenuItem("Blur Filter 4", new int[][]{
+        menu.add(makeFilterMenuItem("Blur Filter 5", new int[][]{
         {1, 1, 1},
         {1, 4, 1},
         {1, 1, 1},
     }));
-      menu.add(makeFilterMenuItem("Blur Filter 12", new int[][]{
+        menu.add(makeFilterMenuItem("Blur Filter 6", new int[][]{
         {1, 1, 1},
         {1, 12, 1},
         {1, 1, 1},
