@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.delor.graphprocessing;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -26,15 +21,16 @@ public class JPreviewPanelBrightness extends JPreviewPanel {
         initComponents();
         
         Dictionary<Integer, Component> labelTable = new Hashtable<Integer, Component>();
-      labelTable.put(-255, new JLabel("Min"));
-      labelTable.put(-200, new JLabel("-200"));
-      labelTable.put(-100, new JLabel("-100"));
-      labelTable.put(0, new JLabel("0"));
-      labelTable.put(100, new JLabel("100"));
-      labelTable.put(200, new JLabel("200"));
-      labelTable.put(255, new JLabel("Max"));
 
-      jSliderBrightness.setLabelTable(labelTable);
+        labelTable.put(-255, new JLabel("Min"));
+        labelTable.put(-200, new JLabel("-200"));
+        labelTable.put(-100, new JLabel("-100"));
+        labelTable.put(0, new JLabel("0"));
+        labelTable.put(100, new JLabel("100"));
+        labelTable.put(200, new JLabel("200"));
+        labelTable.put(255, new JLabel("Max"));
+
+        jSliderBrightness.setLabelTable(labelTable);
     }
 
     /**
@@ -88,6 +84,7 @@ public class JPreviewPanelBrightness extends JPreviewPanel {
         for (int y = 0; y < input.getHeight(); y++) {
             for (int x = 0; x < input.getWidth(); x++) {
                 int pixel = input.getRGB(x, y);
+
                 int r = getRed(pixel) + brightness;
                 int g = getGreen(pixel) + brightness;
                 int b = getBlue(pixel) + brightness;

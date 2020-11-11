@@ -12,10 +12,9 @@ import static pl.delor.graphprocessing.GP.toRGB;
  */
 public class JPreviewPanelFilterRoberts2 extends JPreviewPanelFilter {
 
-    public JPreviewPanelFilterRoberts2(String title, int[][] filter) {
+    public JPreviewPanelFilterRoberts2(String title) {
         super(title, new int[][]{{1}});
-    }
-   
+    }   
 
     private int _w = 0;
     private int _h = 0;

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.delor.graphprocessing;
 
 import java.awt.Graphics;
@@ -76,14 +71,16 @@ public class GP {
     }
 
     public static int toARGB(int r, int g, int b, int a) {
-        return ((((toConstraints(a) << 8 | toConstraints(r)) << 8) | toConstraints(g)) << 8) | toConstraints(b);
+        return (toConstraints(a) << 24) | (toConstraints(r) << 16) | (toConstraints(g) << 8) | toConstraints(b);
     }
+
 
     // sRGB luminance(Y) values
     final static double rY = 0.212655;
     final static double gY = 0.715158;
     final static double bY = 0.072187;
 
+    //calculating luminance source: https://stackoverflow.com/a/13558570
 // Inverse of sRGB "gamma" function. (approx 2.2)
     static double inv_gam_sRGB(int ic) {
         double c = ic / 255.0;

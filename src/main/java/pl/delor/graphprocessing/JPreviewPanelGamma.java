@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.delor.graphprocessing;
 import java.awt.image.BufferedImage;
 import static pl.delor.graphprocessing.GP.getBlue;
@@ -69,13 +64,13 @@ public class JPreviewPanelGamma extends JPreviewPanel {
 
     @Override
     protected BufferedImage doProcessImage(BufferedImage input, BufferedImage output) {
-        int p = jSliderPower.getValue();
+        double _p = 1.0/jSliderPower.getValue();
         for (int y = 0; y < input.getHeight(); y++) {
             for (int x = 0; x < input.getWidth(); x++) {
                 int pixel = input.getRGB(x, y);
-                int r = (int)(255 * Math.pow(getRed(pixel)/255.0, 1.0/p));
-                int g = (int)(255 * Math.pow(getGreen(pixel)/255.0, 1.0/p));
-                int b = (int)(255 * Math.pow(getBlue(pixel)/255.0, 1.0/p));
+                int r = (int)(255 * Math.pow(getRed(pixel)/255.0, _p));
+                int g = (int)(255 * Math.pow(getGreen(pixel)/255.0, _p));
+                int b = (int)(255 * Math.pow(getBlue(pixel)/255.0, _p));
 
                 output.setRGB(x, y, toRGB(r, g, b));
             }

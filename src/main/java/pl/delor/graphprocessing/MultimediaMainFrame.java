@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.delor.graphprocessing;
 
 import java.awt.image.BufferedImage;
@@ -527,11 +522,6 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
                 jCheckBoxMenuItemShowStatsStateChanged(evt);
             }
         });
-        jCheckBoxMenuItemShowStats.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxMenuItemShowStatsActionPerformed(evt);
-            }
-        });
         jMenuStats.add(jCheckBoxMenuItemShowStats);
 
         jMenuBarMain.add(jMenuStats);
@@ -697,26 +687,16 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     /* Simple panel with pixel processing in lambda expression */
     private void jMenuItemInvertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemInvertActionPerformed
         showPreviewPanel(this, new JPreviewPanelProcess("Invert", (pixel) -> {
-            int r = getRed(pixel);
-            int g = getGreen(pixel);
-            int b = getBlue(pixel);
-            return toRGB(255 - r, 255 - g, 255 - b);
+            return toRGB(255 - getRed(pixel), 255 - getGreen(pixel), 255 - getBlue(pixel));
         }));
     }//GEN-LAST:event_jMenuItemInvertActionPerformed
 
     private void jMenuItemGrayscaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGrayscaleActionPerformed
-        showPreviewPanel(this, new JPreviewPanelProcess("Grayscale", (pixel) -> {
-            int r = getRed(pixel);
-            int g = getGreen(pixel);
-            int b = getBlue(pixel);
-            int luminance = toLuminance(r, g, b);
+        showPreviewPanel(this, new JPreviewPanelProcess("Grayscale (luminance)", (pixel) -> {
+            int luminance = toLuminance(getRed(pixel), getGreen(pixel), getBlue(pixel));
             return toRGB(luminance, luminance, luminance);
         }));
     }//GEN-LAST:event_jMenuItemGrayscaleActionPerformed
-
-    private void jCheckBoxMenuItemShowStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemShowStatsActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBoxMenuItemShowStatsActionPerformed
 
     private void jCheckBoxMenuItemShowStatsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemShowStatsStateChanged
         updateStatsLabels();
@@ -743,6 +723,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private void jMenuItemBinarizationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemBinarizationActionPerformed
         showPreviewPanel(this, new JPreviewPanelBinary());
     }//GEN-LAST:event_jMenuItemBinarizationActionPerformed
+    /* Filters events */
     private void jMenuItemFilterActionPerformed(java.awt.event.ActionEvent evt, String name) {
         showPreviewPanel(this, new JPreviewPanelFilter(name, filters.get(name)));
     } 
@@ -750,10 +731,10 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         showPreviewPanel(this, new JPreviewPanelFilterCustom());
     } 
     private void jMenuItemFilterRoberts1ActionPerformed(java.awt.event.ActionEvent evt) {
-        showPreviewPanel(this, new JPreviewPanelFilterRoberts("Roberts Filter 1", null));
+        showPreviewPanel(this, new JPreviewPanelFilterRoberts("Roberts Filter 1"));
     } 
     private void jMenuItemFilterRoberts2ActionPerformed(java.awt.event.ActionEvent evt) {
-        showPreviewPanel(this, new JPreviewPanelFilterRoberts2("Roberts Filter 2", null));
+        showPreviewPanel(this, new JPreviewPanelFilterRoberts2("Roberts Filter 2"));
     } 
     /**
      * @param args the command line arguments

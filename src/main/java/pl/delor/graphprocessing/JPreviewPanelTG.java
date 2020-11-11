@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.delor.graphprocessing;
 
 import java.awt.image.BufferedImage;
@@ -48,7 +43,7 @@ public class JPreviewPanelTG extends JPreviewPanel {
 
     @Override
     protected String title() {
-        return "To gray";
+        return "Grayscale (average)";
     }
 
    @Override

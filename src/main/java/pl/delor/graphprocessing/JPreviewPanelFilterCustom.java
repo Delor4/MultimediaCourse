@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.delor.graphprocessing;
 import java.awt.image.BufferedImage;
 import static pl.delor.graphprocessing.GP.getBlue;
@@ -37,10 +32,10 @@ public class JPreviewPanelFilterCustom extends JPreviewPanelFilter {
         }
     }
 
-    class MyDocumentListener implements DocumentListener {
-        int i;
-        int j;
-        public MyDocumentListener(int i, int j){
+    class TextAreaDocumentListener implements DocumentListener {
+        final int i;
+        final int j;
+        public TextAreaDocumentListener(int i, int j) {
             super();
             this.i = i;
             this.j = j;
@@ -61,7 +56,6 @@ public class JPreviewPanelFilterCustom extends JPreviewPanelFilter {
         }
     }
     private void makeTextAreas(int size) {
-        
         this.textAreas = new JTextArea[size][size];
         int half = (size - 1) / 2;
         for(int i = 0; i < size; i++){
@@ -69,9 +63,10 @@ public class JPreviewPanelFilterCustom extends JPreviewPanelFilter {
                 JTextArea ta = new JTextArea();
                 ta.setColumns(5);
                 if(i == j && i == half){
-                  ta.setBackground(new java.awt.Color(128, 128, 128));
+                    /* Center of matrix */
+                    ta.setBackground(new java.awt.Color(128, 128, 128));
                 }
-                ta.getDocument().addDocumentListener(new MyDocumentListener(i, j));
+                ta.getDocument().addDocumentListener(new TextAreaDocumentListener(i, j));
                 textAreas[i][j] = ta;
                 jPanelMatrixValues.add(ta);
             }
@@ -138,7 +133,7 @@ public class JPreviewPanelFilterCustom extends JPreviewPanelFilter {
             val = 0;
             textAreas[x][y].setForeground(new java.awt.Color(255, 0, 0));
         }
-        
+
         int[][] _f = getFilter();
         if(_f[x][y] != val){
             _f[x][y] = val;

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.delor.graphprocessing;
 
 import java.awt.image.BufferedImage;
@@ -36,8 +31,7 @@ public class JPreviewPanelProcess extends JPreviewPanel {
     protected BufferedImage doProcessImage(BufferedImage input, BufferedImage output) {
         for (int y = 0; y < input.getHeight(); y++) {
             for (int x = 0; x < input.getWidth(); x++) {
-                int pixel = f.apply(input.getRGB(x, y));
-                output.setRGB(x, y, pixel);
+                output.setRGB(x, y, f.apply(input.getRGB(x, y)));
             }
         }
         return output;
