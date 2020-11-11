@@ -47,7 +47,7 @@ public class JPreviewPanelFilter extends JPreviewPanel {
     private int _w = 0;
     private int _h = 0;
 
-    private void initProcessing(BufferedImage input) {
+    protected void initProcessing(BufferedImage input) {
         int w = 0;
         for (int i = 0; i < filter.length; i++) {
             for (int j = 0; j < filter[i].length; j++) {
@@ -61,7 +61,7 @@ public class JPreviewPanelFilter extends JPreviewPanel {
         _h = input.getHeight();
     }
 
-    private int applyFilter(int x, int y, BufferedImage input) {
+    protected int applyFilter(int x, int y, BufferedImage input) {
         int sumR = 0;
         int sumG = 0;
         int sumB = 0;

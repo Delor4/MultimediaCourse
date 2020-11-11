@@ -249,11 +249,34 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         });
        return item;
     }
+     private JMenu makeRobertsMenu(){
+        JMenu menu = new JMenu("Roberts");
+        JMenuItem item;
+        
+        item = new JMenuItem("Roberts Filter 1");
+        item.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFilterRoberts1ActionPerformed(evt);
+            }
+        });
+        menu.add(item);
+        
+        item = new JMenuItem("Roberts Filter 2");
+        item.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFilterRoberts2ActionPerformed(evt);
+            }
+        });
+        menu.add(item);
+        
+        return menu;
+    }
     private void addAllMenus(){
         jSubMenuMenuFilters.add(makePrevittMenu());
         jSubMenuMenuFilters.add(makeSobelMenu());
         jSubMenuMenuFilters.add(makeBlurMenu());
         jSubMenuMenuFilters.add(makeSharpMenu());
+        jSubMenuMenuFilters.add(makeRobertsMenu());
         jSubMenuMenuFilters.add(makeFilterMenuItemCustom("Custom"));
     }
 
@@ -725,6 +748,12 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     } 
     private void jMenuItemCustomFilterActionPerformed(java.awt.event.ActionEvent evt) {
         showPreviewPanel(this, new JPreviewPanelFilterCustom());
+    } 
+    private void jMenuItemFilterRoberts1ActionPerformed(java.awt.event.ActionEvent evt) {
+        showPreviewPanel(this, new JPreviewPanelFilterRoberts("Roberts Filter 1", null));
+    } 
+    private void jMenuItemFilterRoberts2ActionPerformed(java.awt.event.ActionEvent evt) {
+        showPreviewPanel(this, new JPreviewPanelFilterRoberts2("Roberts Filter 2", null));
     } 
     /**
      * @param args the command line arguments
