@@ -1,0 +1,205 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package pl.delor.graphprocessing;
+import java.awt.image.BufferedImage;
+import static pl.delor.graphprocessing.GP.getBlue;
+import static pl.delor.graphprocessing.GP.getGreen;
+import static pl.delor.graphprocessing.GP.getRed;
+import static pl.delor.graphprocessing.GP.toRGB;
+import javax.swing.*;
+import javax.swing.event.*;
+
+/**
+ *
+ * @author delor
+ */
+public class JPreviewPanelFilterCustom extends JPreviewPanelFilter {
+
+    /**
+     * Creates new form JPreviewPanelFilterCustom
+     */
+    public JPreviewPanelFilterCustom() {
+        super("Custom filter", new int[][]{{1}});
+        initComponents();
+        updateTextAreas();
+    }
+
+    JTextArea textAreas[][] = new JTextArea[][]{{}};
+    
+    private void removeTextAreas() {
+        for(int i = 0; i < textAreas.length; i++){
+            for(int j = 0; j < textAreas[0].length; j++){
+                jPanelMatrixValues.remove(textAreas[i][j]);
+            }
+        }
+    }
+
+    class MyDocumentListener implements DocumentListener {
+        int i;
+        int j;
+        public MyDocumentListener(int i, int j){
+            super();
+            this.i = i;
+            this.j = j;
+        }
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            changedTextAreaValue(e, i, j);
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+             changedTextAreaValue(e, i, j);
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+             changedTextAreaValue(e, i, j);
+        }
+    }
+    private void makeTextAreas(int size) {
+        
+        this.textAreas = new JTextArea[size][size];
+        int half = (size - 1) / 2;
+        for(int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++){
+                JTextArea ta = new JTextArea();
+                ta.setColumns(5);
+                if(i == j && i == half){
+                  ta.setBackground(new java.awt.Color(128, 128, 128));
+                }
+                ta.getDocument().addDocumentListener(new MyDocumentListener(i, j));
+                textAreas[i][j] = ta;
+                jPanelMatrixValues.add(ta);
+            }
+        }
+    }
+    private int[][] resizeMatrix(int[][] old, int size) {
+        int [][] newMatrix = new int[size][size];
+
+        int osize = old.length;
+        int sub = (size - osize) / 2;
+        
+        if(osize < size){
+            for(int i = 0; i < osize; i++){
+                for(int j = 0; j < osize; j++){
+                        newMatrix[i + sub][j + sub] = old[i][j];
+                }
+            }
+        } else {
+            for(int i = 0; i < size; i++){
+                for(int j = 0; j < size; j++){
+                    newMatrix[i][j] = old[i - sub][j - sub];
+                }
+            }
+        }
+        return newMatrix;
+    }
+    
+    private void updateTextAreasValues(int size) {
+        int matrix[][] = getFilter();
+        if(matrix.length != size){
+            matrix = resizeMatrix(matrix, size);
+            setFilter(matrix);
+        }
+         for(int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++){
+                textAreas[i][j].setText(Integer.toString(matrix[i][j]));
+            }
+         }
+    }
+    private void updateTextAreas() {
+        removeTextAreas();
+        int size = jSliderMatrixSize.getValue();
+        makeTextAreas(size);
+        updateTextAreasValues(size);
+        
+        jPanelMatrixValues.setLayout(new java.awt.GridLayout(size, size));
+        java.awt.GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        add(jPanelMatrixValues, gridBagConstraints);
+        
+        jPanelMatrixValues.revalidate();
+        jPanelMatrixValues.repaint();
+    }
+    
+    public void changedTextAreaValue(DocumentEvent e, int x, int y) {
+        int val;
+        try {
+            val = Integer.parseInt(textAreas[x][y].getText());
+            textAreas[x][y].setForeground(new java.awt.Color(0, 0, 0));
+        } catch(NumberFormatException _e) {
+            val = 0;
+            textAreas[x][y].setForeground(new java.awt.Color(255, 0, 0));
+        }
+        
+        int[][] _f = getFilter();
+        if(_f[x][y] != val){
+            _f[x][y] = val;
+            setFilter(_f);
+            this.processImage();
+        }
+    }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        jSliderMatrixSize = new javax.swing.JSlider();
+        jPanelMatrixValues = new javax.swing.JPanel();
+
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setLayout(new java.awt.GridBagLayout());
+
+        jSliderMatrixSize.setMajorTickSpacing(2);
+        jSliderMatrixSize.setMaximum(11);
+        jSliderMatrixSize.setMinimum(3);
+        jSliderMatrixSize.setPaintLabels(true);
+        jSliderMatrixSize.setPaintTicks(true);
+        jSliderMatrixSize.setValue(3);
+        jSliderMatrixSize.setRequestFocusEnabled(false);
+        jSliderMatrixSize.setValueIsAdjusting(true);
+        jSliderMatrixSize.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSliderMatrixSizeStateChanged(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.weightx = 1.0;
+        add(jSliderMatrixSize, gridBagConstraints);
+
+        jPanelMatrixValues.setLayout(new java.awt.GridLayout(3, 3));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        add(jPanelMatrixValues, gridBagConstraints);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jSliderMatrixSizeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSliderMatrixSizeStateChanged
+        updateTextAreas();
+        super.processImage();
+    }//GEN-LAST:event_jSliderMatrixSizeStateChanged
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanelMatrixValues;
+    private javax.swing.JSlider jSliderMatrixSize;
+    // End of variables declaration//GEN-END:variables
+}

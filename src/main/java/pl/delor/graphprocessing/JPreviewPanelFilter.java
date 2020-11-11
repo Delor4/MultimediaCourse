@@ -28,8 +28,19 @@ public class JPreviewPanelFilter extends JPreviewPanel {
     protected String title() {
         return title;
     }
+    
     private int[][] filter = null;
 
+    public int[][] getFilter(){
+        return filter;
+    }
+    
+    public void setFilter(int[][] filter){
+        this.filter = filter;
+        this.revalidate();
+        this.repaint();
+    }
+    
     private int _weight = 0;
     private int _dx = 0;
     private int _dy = 0;

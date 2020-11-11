@@ -240,11 +240,21 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     }));
         return menu;
     }
+     private JMenuItem makeFilterMenuItemCustom(String name){
+       JMenuItem item = new JMenuItem(name);
+       item.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCustomFilterActionPerformed(evt);
+            }
+        });
+       return item;
+    }
     private void addAllMenus(){
         jSubMenuMenuFilters.add(makePrevittMenu());
         jSubMenuMenuFilters.add(makeSobelMenu());
         jSubMenuMenuFilters.add(makeBlurMenu());
         jSubMenuMenuFilters.add(makeSharpMenu());
+        jSubMenuMenuFilters.add(makeFilterMenuItemCustom("Custom"));
     }
 
 
@@ -712,6 +722,9 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemBinarizationActionPerformed
     private void jMenuItemFilterActionPerformed(java.awt.event.ActionEvent evt, String name) {
         showPreviewPanel(this, new JPreviewPanelFilter(name, filters.get(name)));
+    } 
+    private void jMenuItemCustomFilterActionPerformed(java.awt.event.ActionEvent evt) {
+        showPreviewPanel(this, new JPreviewPanelFilterCustom());
     } 
     /**
      * @param args the command line arguments
