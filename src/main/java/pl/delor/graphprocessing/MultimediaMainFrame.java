@@ -737,7 +737,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
     private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutActionPerformed
         JOptionPane.showMessageDialog(this,
-                "  Graphics processing.\n\n by Sebastian Kucharczyk");
+                "  Graphics processing.\n\n ver. 1.0\n\n by Sebastian Kucharczyk");
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
     private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExitActionPerformed
