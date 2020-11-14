@@ -24,6 +24,9 @@ import static pl.delor.graphprocessing.GP.toLuminance;
 import static pl.delor.graphprocessing.GP.toRGB;
 import javax.swing.*;    
 import java.awt.event.*;    
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
@@ -314,6 +317,8 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuItemLog = new javax.swing.JMenuItem();
         jMenuItemBinarization = new javax.swing.JMenuItem();
         jSubMenuMenuFilters = new javax.swing.JMenu();
+        jMenuHistogram = new javax.swing.JMenu();
+        jMenuItemHistogramShow = new javax.swing.JMenuItem();
         jMenuStats = new javax.swing.JMenu();
         jCheckBoxMenuItemShowStats = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
@@ -513,6 +518,18 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
         jMenuBarMain.add(jMenuEdit);
 
+        jMenuHistogram.setText("Histogram");
+
+        jMenuItemHistogramShow.setText("Show");
+        jMenuItemHistogramShow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemHistogramShowActionPerformed(evt);
+            }
+        });
+        jMenuHistogram.add(jMenuItemHistogramShow);
+
+        jMenuBarMain.add(jMenuHistogram);
+
         jMenuStats.setText("Stats");
 
         jCheckBoxMenuItemShowStats.setSelected(true);
@@ -653,6 +670,21 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
             statsChangedCd.setVisible(false);
         }
     }
+    private int[][] getHist() {        
+        if(imageOutput == null) return null;
+        
+        int hist[][] = new int[3][256];
+        for (int y = 0; y < imageOutput.getHeight(); y++) {
+            for (int x = 0; x < imageOutput.getWidth(); x++) {
+                int pixel = imageOutput.getRGB(x, y);
+                hist[0][getRed(pixel)]++;
+                hist[1][getGreen(pixel)]++;
+                hist[2][getBlue(pixel)]++;
+            }
+        }
+        return hist;
+    }
+
     private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
         loadImage();
     }//GEN-LAST:event_jButtonOpenActionPerformed
@@ -723,6 +755,12 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private void jMenuItemBinarizationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemBinarizationActionPerformed
         showPreviewPanel(this, new JPreviewPanelBinary());
     }//GEN-LAST:event_jMenuItemBinarizationActionPerformed
+
+    private void jMenuItemHistogramShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemHistogramShowActionPerformed
+        if(imageOutput == null) return;
+        JHistogramDialog hist = new JHistogramDialog(getHist());
+        hist.setVisible(true);
+    }//GEN-LAST:event_jMenuItemHistogramShowActionPerformed
     /* Filters events */
     private void jMenuItemFilterActionPerformed(java.awt.event.ActionEvent evt, String name) {
         showPreviewPanel(this, new JPreviewPanelFilter(name, filters.get(name)));
@@ -783,12 +821,14 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenu jMenuHelp;
+    private javax.swing.JMenu jMenuHistogram;
     private javax.swing.JMenuItem jMenuItemAbout;
     private javax.swing.JMenuItem jMenuItemBinarization;
     private javax.swing.JMenuItem jMenuItemBrightness;
     private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JMenuItem jMenuItemGamma;
     private javax.swing.JMenuItem jMenuItemGrayscale;
+    private javax.swing.JMenuItem jMenuItemHistogramShow;
     private javax.swing.JMenuItem jMenuItemInvert;
     private javax.swing.JMenuItem jMenuItemLog;
     private javax.swing.JMenuItem jMenuItemOpen;
