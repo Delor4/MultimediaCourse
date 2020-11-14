@@ -20,7 +20,7 @@ import java.awt.GridBagConstraints;
  *
  * @author delor
  */
-public class JHistogramDialog extends javax.swing.JDialog {
+public class JHistogramDialog extends javax.swing.JFrame {
 
     /**
      * Creates new form JHistogramDialog

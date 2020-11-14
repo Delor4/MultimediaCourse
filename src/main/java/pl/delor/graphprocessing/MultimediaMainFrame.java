@@ -319,6 +319,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jSubMenuMenuFilters = new javax.swing.JMenu();
         jMenuHistogram = new javax.swing.JMenu();
         jMenuItemHistogramShow = new javax.swing.JMenuItem();
+        jMenuItemProjections = new javax.swing.JMenuItem();
         jMenuStats = new javax.swing.JMenu();
         jCheckBoxMenuItemShowStats = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
@@ -518,15 +519,23 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
         jMenuBarMain.add(jMenuEdit);
 
-        jMenuHistogram.setText("Histogram");
+        jMenuHistogram.setText("Charts");
 
-        jMenuItemHistogramShow.setText("Show");
+        jMenuItemHistogramShow.setText("Show histogram");
         jMenuItemHistogramShow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemHistogramShowActionPerformed(evt);
             }
         });
         jMenuHistogram.add(jMenuItemHistogramShow);
+
+        jMenuItemProjections.setText("Show projections");
+        jMenuItemProjections.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemProjectionsActionPerformed(evt);
+            }
+        });
+        jMenuHistogram.add(jMenuItemProjections);
 
         jMenuBarMain.add(jMenuHistogram);
 
@@ -670,7 +679,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
             statsChangedCd.setVisible(false);
         }
     }
-    private int[][] getHist() {        
+    private int[][] getHistogramData() {        
         if(imageOutput == null) return null;
         
         int hist[][] = new int[3][256];
@@ -683,6 +692,35 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
             }
         }
         return hist;
+    }
+    private List<int[][]> getProjectionsData() {
+        if(imageOutput == null) return null;
+        
+        List<int[][]> projList = new ArrayList<int[][]>();
+        
+        int projHoriz[][] = new int[3][imageOutput.getWidth()];
+        int projVert[][] = new int[3][imageOutput.getHeight()];
+        
+        for (int y = 0; y < imageOutput.getHeight(); y++) {
+            for (int x = 0; x < imageOutput.getWidth(); x++) {
+                int pixel = imageOutput.getRGB(x, y);
+                if(getRed(pixel) > 127){
+                    projHoriz[0][x]++;
+                    projVert[0][y]++;
+                }
+                if(getGreen(pixel) > 127){
+                    projHoriz[1][x]++;
+                    projVert[1][y]++;
+                }
+                if(getBlue(pixel) > 127){
+                    projHoriz[2][x]++;
+                    projVert[2][y]++;
+                }
+            }
+        }
+        projList.add(projHoriz);
+        projList.add(projVert);
+        return projList;
     }
 
     private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
@@ -758,9 +796,15 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
     private void jMenuItemHistogramShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemHistogramShowActionPerformed
         if(imageOutput == null) return;
-        JHistogramDialog hist = new JHistogramDialog(getHist());
+        JHistogramDialog hist = new JHistogramDialog(getHistogramData());
         hist.setVisible(true);
     }//GEN-LAST:event_jMenuItemHistogramShowActionPerformed
+
+    private void jMenuItemProjectionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemProjectionsActionPerformed
+        if(imageOutput == null) return;
+        JProjectionsFrame proj = new JProjectionsFrame(getProjectionsData());
+        proj.setVisible(true);
+    }//GEN-LAST:event_jMenuItemProjectionsActionPerformed
     /* Filters events */
     private void jMenuItemFilterActionPerformed(java.awt.event.ActionEvent evt, String name) {
         showPreviewPanel(this, new JPreviewPanelFilter(name, filters.get(name)));
@@ -833,6 +877,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemLog;
     private javax.swing.JMenuItem jMenuItemOpen;
     private javax.swing.JMenuItem jMenuItemPower;
+    private javax.swing.JMenuItem jMenuItemProjections;
     private javax.swing.JMenuItem jMenuItemSave;
     private javax.swing.JMenuItem jMenuItemToGray;
     private javax.swing.JMenu jMenuStats;

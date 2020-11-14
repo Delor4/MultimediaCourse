@@ -130,15 +130,23 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenuHistogram">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Histogram"/>
+            <Property name="text" type="java.lang.String" value="Charts"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemHistogramShow">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Show"/>
+                <Property name="text" type="java.lang.String" value="Show histogram"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemHistogramShowActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemProjections">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Show projections"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemProjectionsActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
