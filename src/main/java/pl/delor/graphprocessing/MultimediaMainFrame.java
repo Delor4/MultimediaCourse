@@ -27,6 +27,8 @@ import java.awt.event.*;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 
 /**
  *
@@ -292,14 +294,14 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         fileChooserLoad = new javax.swing.JFileChooser("./");
         fileChooserSave = new javax.swing.JFileChooser("./");
         jImageSource = new pl.delor.graphprocessing.JImage();
-        statsSourceAvg = new javax.swing.JLabel();
-        statsSourceCv = new javax.swing.JLabel();
-        statsSourceCd = new javax.swing.JLabel();
+        statsSourceAvg = new pl.delor.graphprocessing.JOutlinedLabel();
+        statsSourceCv = new pl.delor.graphprocessing.JOutlinedLabel();
+        statsSourceCd = new pl.delor.graphprocessing.JOutlinedLabel();
         jPanelSeparator = new javax.swing.JPanel();
         jImageChanged = new pl.delor.graphprocessing.JImage();
-        statsChangedAvg = new javax.swing.JLabel();
-        statsChangedCv = new javax.swing.JLabel();
-        statsChangedCd = new javax.swing.JLabel();
+        statsChangedAvg = new pl.delor.graphprocessing.JOutlinedLabel();
+        statsChangedCv = new pl.delor.graphprocessing.JOutlinedLabel();
+        statsChangedCd = new pl.delor.graphprocessing.JOutlinedLabel();
         jButtonOpen = new javax.swing.JButton();
         jMenuBarMain = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
@@ -336,14 +338,25 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
         statsSourceAvg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         statsSourceAvg.setText("jLabel1");
+        statsSourceAvg.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        statsSourceAvg.setOutlineColor(new java.awt.Color(0, 0, 0));
+        statsSourceAvg.setStroke(new java.awt.BasicStroke(3.0f));
         jImageSource.add(statsSourceAvg);
 
+        statsSourceCv.setForeground(new java.awt.Color(0, 0, 0));
         statsSourceCv.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         statsSourceCv.setText("jLabel1");
+        statsSourceCv.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        statsSourceCv.setOutlineColor(new java.awt.Color(255, 255, 255));
+        statsSourceCv.setStroke(new java.awt.BasicStroke(3.0f));
         jImageSource.add(statsSourceCv);
 
+        statsSourceCd.setForeground(new java.awt.Color(0, 0, 0));
         statsSourceCd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         statsSourceCd.setText("jLabel1");
+        statsSourceCd.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        statsSourceCd.setOutlineColor(new java.awt.Color(255, 255, 255));
+        statsSourceCd.setStroke(new java.awt.BasicStroke(3.0f));
         jImageSource.add(statsSourceCd);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -380,16 +393,28 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jImageChanged.setMinimumSize(new java.awt.Dimension(100, 182));
         jImageChanged.setLayout(new java.awt.GridLayout(10, 0));
 
+        statsChangedAvg.setForeground(new java.awt.Color(0, 0, 0));
         statsChangedAvg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         statsChangedAvg.setText("jLabel2");
+        statsChangedAvg.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        statsChangedAvg.setOutlineColor(new java.awt.Color(255, 255, 255));
+        statsChangedAvg.setStroke(new java.awt.BasicStroke(3.0f));
         jImageChanged.add(statsChangedAvg);
 
+        statsChangedCv.setForeground(new java.awt.Color(0, 0, 0));
         statsChangedCv.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         statsChangedCv.setText("jLabel1");
+        statsChangedCv.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        statsChangedCv.setOutlineColor(new java.awt.Color(255, 255, 255));
+        statsChangedCv.setStroke(new java.awt.BasicStroke(3.0f));
         jImageChanged.add(statsChangedCv);
 
+        statsChangedCd.setForeground(new java.awt.Color(0, 0, 0));
         statsChangedCd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         statsChangedCd.setText("jLabel1");
+        statsChangedCd.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        statsChangedCd.setOutlineColor(new java.awt.Color(255, 255, 255));
+        statsChangedCd.setStroke(new java.awt.BasicStroke(3.0f));
         jImageChanged.add(statsChangedCd);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -635,7 +660,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     
     String[] getFormatedStats(JImage image){
         Integer avg = image.getAvgBrightness();
-        String[] out = {"", "", ""};
+        String[] out = {" ", " ", " "};
         if(avg == null) {
             out[0] = "Load some image.";
             return out;
@@ -644,10 +669,10 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         out[0] = String.format("Avg brightness: (%d, %d, %d)", getRed(avg), getGreen(avg), getBlue(avg));
 
         int cv = image.getContrastVariance();
-        out[1] = String.format("contrast variance: (%d, %d, %d)", getRed(cv), getGreen(cv), getBlue(cv));
+        out[1] = String.format("Contrast variance: (%d, %d, %d)", getRed(cv), getGreen(cv), getBlue(cv));
         
         int cd = image.getContrastDynamic();
-        out[2] = String.format("contrast dynamic: (%d, %d, %d)", getRed(cd), getGreen(cd), getBlue(cd));
+        out[2] = String.format("Contrast dynamic: (%d, %d, %d)", getRed(cd), getGreen(cd), getBlue(cd));
         
         return out;
     }
@@ -656,6 +681,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         if(jCheckBoxMenuItemShowStats.isSelected()){
            
             String[] s = getFormatedStats(jImageSource);
+            statsSourceAvg.setOutlineColor(Color.white);
             statsSourceAvg.setText(s[0]);
             statsSourceAvg.setVisible(true);
             statsSourceCv.setText(s[1]);
@@ -884,11 +910,11 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelSeparator;
     private javax.swing.JMenu jSubMenuMenuFilters;
     private javax.swing.JMenu jSubMenuPixelManip;
-    private javax.swing.JLabel statsChangedAvg;
-    private javax.swing.JLabel statsChangedCd;
-    private javax.swing.JLabel statsChangedCv;
-    private javax.swing.JLabel statsSourceAvg;
-    private javax.swing.JLabel statsSourceCd;
-    private javax.swing.JLabel statsSourceCv;
+    private pl.delor.graphprocessing.JOutlinedLabel statsChangedAvg;
+    private pl.delor.graphprocessing.JOutlinedLabel statsChangedCd;
+    private pl.delor.graphprocessing.JOutlinedLabel statsChangedCv;
+    private pl.delor.graphprocessing.JOutlinedLabel statsSourceAvg;
+    private pl.delor.graphprocessing.JOutlinedLabel statsSourceCd;
+    private pl.delor.graphprocessing.JOutlinedLabel statsSourceCv;
     // End of variables declaration//GEN-END:variables
 }
