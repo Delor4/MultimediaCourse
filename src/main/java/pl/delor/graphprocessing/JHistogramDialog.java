@@ -7,7 +7,9 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.renderer.xy.StandardXYBarPainter;
 import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
@@ -97,11 +99,11 @@ public class JHistogramDialog extends javax.swing.JDialog {
 
         return chart;
     }
-private JFreeChart createCumulativeChart(XYDataset dataset) {
+    private JFreeChart createCumulativeChart(XYDataset dataset) {
 
         JFreeChart chart = ChartFactory.
                 createXYAreaChart(
-                "Image histogram", // title
+                "Image cumulative histogram", // title
                 "Color value", // x-axis label
                 "Values count", // y-axis label
                 dataset);
@@ -116,10 +118,15 @@ private JFreeChart createCumulativeChart(XYDataset dataset) {
         plot.setDomainCrosshairVisible(true);
         plot.setRangeCrosshairVisible(true);
 
-        var renderer = plot.getRenderer();
+        XYBarRenderer renderer = new XYBarRenderer();
+        plot.setRenderer(0, renderer);
         renderer.setSeriesPaint(0, new Color(0xFF, 0x55, 0x55));
         renderer.setSeriesPaint(1, new Color(0x55, 0xFF, 0x55));
         renderer.setSeriesPaint(2, new Color(0x55, 0x55, 0xFF));
+        
+        renderer.setDrawBarOutline(false);
+        renderer.setBarPainter(new StandardXYBarPainter());
+        renderer.setShadowVisible(false);
 
         return chart;
     }
