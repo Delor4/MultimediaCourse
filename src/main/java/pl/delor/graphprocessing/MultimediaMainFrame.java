@@ -204,22 +204,22 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         {2, 4, 2},
         {1, 2, 1},
     }));
-      menu.add(makeFilterMenuItem("Gauss Filter 2", new int[][]{
+      menu.add(makeFilterMenuItem("Gaussian Filter 2", new int[][]{
         {1, 3, 1},
         {3, 9, 3},
         {1, 3, 1},
     }));
-      menu.add(makeFilterMenuItem("Gauss Filter 3", new int[][]{
+      menu.add(makeFilterMenuItem("Gaussian Filter 3", new int[][]{
         {1, 4, 1},
         {4, 16, 4},
         {1, 4, 1},
     }));
-      menu.add(makeFilterMenuItem("Gauss Filter 4", new int[][]{
+      menu.add(makeFilterMenuItem("Gaussian Filter 4", new int[][]{
         {1, 4, 1},
         {4, 12, 4},
         {1, 4, 1},
     }));
-      menu.add(makeFilterMenuItem("Gauss Filter 5", new int[][]{
+      menu.add(makeFilterMenuItem("Gaussian Filter 5", new int[][]{
         {1, 3, 1},
         {3, 16, 3},
         {1, 3, 1},
@@ -302,7 +302,6 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         statsChangedAvg = new pl.delor.graphprocessing.JOutlinedLabel();
         statsChangedCv = new pl.delor.graphprocessing.JOutlinedLabel();
         statsChangedCd = new pl.delor.graphprocessing.JOutlinedLabel();
-        jButtonOpen = new javax.swing.JButton();
         jMenuBarMain = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuItemOpen = new javax.swing.JMenuItem();
@@ -426,20 +425,6 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.weightx = 1.0;
         getContentPane().add(jImageChanged, gridBagConstraints);
-
-        jButtonOpen.setText("Open");
-        jButtonOpen.setToolTipText("Open file ...");
-        jButtonOpen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonOpenActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
-        getContentPane().add(jButtonOpen, gridBagConstraints);
 
         jMenuFile.setText("File");
 
@@ -749,12 +734,8 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         return projList;
     }
 
-    private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
-        loadImage();
-    }//GEN-LAST:event_jButtonOpenActionPerformed
-
     private void jMenuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenActionPerformed
-        jButtonOpenActionPerformed(evt);
+        loadImage();
     }//GEN-LAST:event_jMenuItemOpenActionPerformed
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
@@ -883,7 +864,6 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser fileChooserLoad;
     private javax.swing.JFileChooser fileChooserSave;
-    private javax.swing.JButton jButtonOpen;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemShowStats;
     private pl.delor.graphprocessing.JImage jImageChanged;
     private pl.delor.graphprocessing.JImage jImageSource;
