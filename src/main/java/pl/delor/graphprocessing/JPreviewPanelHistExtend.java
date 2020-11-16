@@ -70,7 +70,7 @@ public class JPreviewPanelHistExtend extends JPreviewPanel {
 
     @Override
     protected String title() {
-        return "Histogram Extend";
+        return "Histogram Normalization";
     }
 
     @Override

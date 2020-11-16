@@ -548,7 +548,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         });
         jMenuHistogram.add(jMenuItemProjections);
 
-        jMenuItemExtendRangeBr.setText("Extend Range Brightness");
+        jMenuItemExtendRangeBr.setText("Histogram Normalization");
         jMenuItemExtendRangeBr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemExtendRangeBrActionPerformed(evt);
