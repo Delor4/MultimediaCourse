@@ -321,6 +321,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuHistogram = new javax.swing.JMenu();
         jMenuItemHistogramShow = new javax.swing.JMenuItem();
         jMenuItemProjections = new javax.swing.JMenuItem();
+        jMenuItemExtendRangeBr = new javax.swing.JMenuItem();
         jMenuStats = new javax.swing.JMenu();
         jCheckBoxMenuItemShowStats = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
@@ -546,6 +547,14 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
             }
         });
         jMenuHistogram.add(jMenuItemProjections);
+
+        jMenuItemExtendRangeBr.setText("Extend Range Brightness");
+        jMenuItemExtendRangeBr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemExtendRangeBrActionPerformed(evt);
+            }
+        });
+        jMenuHistogram.add(jMenuItemExtendRangeBr);
 
         jMenuBarMain.add(jMenuHistogram);
 
@@ -812,6 +821,10 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         JProjectionsFrame proj = new JProjectionsFrame(getProjectionsData());
         proj.setVisible(true);
     }//GEN-LAST:event_jMenuItemProjectionsActionPerformed
+
+    private void jMenuItemExtendRangeBrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExtendRangeBrActionPerformed
+        showPreviewPanel(this, new JPreviewPanelHistExtend());
+    }//GEN-LAST:event_jMenuItemExtendRangeBrActionPerformed
     /* Filters events */
     private void jMenuItemFilterActionPerformed(java.awt.event.ActionEvent evt, String name) {
         showPreviewPanel(this, new JPreviewPanelFilter(name, filters.get(name)));
@@ -876,6 +889,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemBinarization;
     private javax.swing.JMenuItem jMenuItemBrightness;
     private javax.swing.JMenuItem jMenuItemExit;
+    private javax.swing.JMenuItem jMenuItemExtendRangeBr;
     private javax.swing.JMenuItem jMenuItemGamma;
     private javax.swing.JMenuItem jMenuItemGrayscale;
     private javax.swing.JMenuItem jMenuItemHistogramShow;
