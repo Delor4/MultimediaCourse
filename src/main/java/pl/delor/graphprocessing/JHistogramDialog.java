@@ -67,11 +67,11 @@ public class JHistogramDialog extends javax.swing.JFrame {
     }
     private int[][] hist = null;
 
-    private JFreeChart createLineChart(XYDataset dataset) {
+    private JFreeChart createLineChart(String title, XYDataset dataset) {
 
         JFreeChart chart = ChartFactory.
                 createXYLineChart(
-                "Image histogram", // title
+                title,
                 "Color value", // x-axis label
                 "Values count", // y-axis label
                 dataset);
@@ -99,11 +99,11 @@ public class JHistogramDialog extends javax.swing.JFrame {
 
         return chart;
     }
-    private JFreeChart createCumulativeChart(XYDataset dataset) {
+    private JFreeChart createBarChart(String title, XYDataset dataset) {
 
         JFreeChart chart = ChartFactory.
                 createXYAreaChart(
-                "Image cumulative histogram", // title
+                title,
                 "Color value", // x-axis label
                 "Values count", // y-axis label
                 dataset);
@@ -131,7 +131,7 @@ public class JHistogramDialog extends javax.swing.JFrame {
         return chart;
     }
 
-    private XYDataset createLineDataset() {
+    private XYDataset createHistDataset() {
 
         float ds[][] = new float[3][256];
         int maxVal = 0;
@@ -202,10 +202,10 @@ public class JHistogramDialog extends javax.swing.JFrame {
         return dataset;
     }
     public JPanel createLineChartPanel() {
-        return createChartPanel(createLineChart(createLineDataset()));
+        return createChartPanel(createBarChart("Image histogram", createHistDataset()));
     }
     public JPanel createCumulativeChartPanel() {
-        return createChartPanel(createCumulativeChart(createCumulativeDataset()));
+        return createChartPanel(createLineChart("Image cumulative histogram", createCumulativeDataset()));
     }
     public JPanel createChartPanel(JFreeChart ch) {
         JFreeChart chart = ch;
@@ -256,7 +256,7 @@ public class JHistogramDialog extends javax.swing.JFrame {
 
         jPanelButtons.setPreferredSize(new java.awt.Dimension(500, 38));
 
-        jButton1.setText("Line");
+        jButton1.setText("Hist");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);

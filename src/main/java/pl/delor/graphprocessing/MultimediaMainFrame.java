@@ -764,6 +764,8 @@ private long [][] makeCDF(int [][] hist){
     }
     
     private void showHistogramEqualization() {
+        if(imageOutput == null) return;
+        
         int [][] hist = getHistogramData();
         long [][] cdf = makeCDF(hist);
             
