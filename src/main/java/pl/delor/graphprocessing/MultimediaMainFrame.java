@@ -321,7 +321,8 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuHistogram = new javax.swing.JMenu();
         jMenuItemHistogramShow = new javax.swing.JMenuItem();
         jMenuItemProjections = new javax.swing.JMenuItem();
-        jMenuItemExtendRangeBr = new javax.swing.JMenuItem();
+        jMenuItemEHistNorm = new javax.swing.JMenuItem();
+        jMenuItemHistEqual = new javax.swing.JMenuItem();
         jMenuStats = new javax.swing.JMenu();
         jCheckBoxMenuItemShowStats = new javax.swing.JCheckBoxMenuItem();
         jMenuHelp = new javax.swing.JMenu();
@@ -548,13 +549,21 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         });
         jMenuHistogram.add(jMenuItemProjections);
 
-        jMenuItemExtendRangeBr.setText("Histogram Normalization");
-        jMenuItemExtendRangeBr.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemEHistNorm.setText("Histogram Normalization");
+        jMenuItemEHistNorm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemExtendRangeBrActionPerformed(evt);
+                jMenuItemEHistNormActionPerformed(evt);
             }
         });
-        jMenuHistogram.add(jMenuItemExtendRangeBr);
+        jMenuHistogram.add(jMenuItemEHistNorm);
+
+        jMenuItemHistEqual.setText("Histogram Equalization");
+        jMenuItemHistEqual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemHistEqualActionPerformed(evt);
+            }
+        });
+        jMenuHistogram.add(jMenuItemHistEqual);
 
         jMenuBarMain.add(jMenuHistogram);
 
@@ -742,7 +751,38 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         projList.add(projVert);
         return projList;
     }
-
+private long [][] makeCDF(int [][] hist){
+        long [][] cdf = new long[hist.length][hist[0].length];
+        for(int c = 0; c < 3; c++){
+            long val = 0;
+            for(int i = 0; i < hist[c].length; i++){
+                val += hist[c][i];
+                cdf[c][i] = val;
+            }
+        }
+        return cdf;
+    }
+    
+    private void showHistogramEqualization() {
+        int [][] hist = getHistogramData();
+        long [][] cdf = makeCDF(hist);
+            
+        int minCDF[] = new int[]{(int)cdf[0][255], (int)cdf[1][255], (int)cdf[2][255]};
+        for(int c = 0; c < 3; c++) {
+            for(int i = 0; i < cdf[c].length; i++) {
+                if(cdf[c][i] > 0) {
+                    minCDF[c] = (int)cdf[c][i];
+                    break;
+                }
+            }
+        }
+        showPreviewPanel(this, new JPreviewPanelProcess("Histogram Equalization", (pixel) -> {
+            int r = (cdf[0][255] - cdf[0][0]) > 0 ? (int)(255 * (cdf[0][getRed(pixel)] - minCDF[0])/(cdf[0][255] - minCDF[0])) : (int)cdf[0][0];
+            int g = (cdf[1][255] - cdf[1][0]) > 0 ?(int)(255 * (cdf[1][getGreen(pixel)] - minCDF[1])/(cdf[1][255] - minCDF[1])) : (int)cdf[1][0];
+            int b = (cdf[2][255] - cdf[2][0]) > 0 ?(int)(255 * (cdf[2][getBlue(pixel)] - minCDF[2])/(cdf[2][255] - minCDF[2])) : (int)cdf[2][0];
+            return toRGB(r, g, b);
+        }));
+    }
     private void jMenuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenActionPerformed
         loadImage();
     }//GEN-LAST:event_jMenuItemOpenActionPerformed
@@ -822,9 +862,13 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         proj.setVisible(true);
     }//GEN-LAST:event_jMenuItemProjectionsActionPerformed
 
-    private void jMenuItemExtendRangeBrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExtendRangeBrActionPerformed
+    private void jMenuItemEHistNormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEHistNormActionPerformed
         showPreviewPanel(this, new JPreviewPanelHistExtend());
-    }//GEN-LAST:event_jMenuItemExtendRangeBrActionPerformed
+    }//GEN-LAST:event_jMenuItemEHistNormActionPerformed
+           
+    private void jMenuItemHistEqualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemHistEqualActionPerformed
+        showHistogramEqualization();
+    }//GEN-LAST:event_jMenuItemHistEqualActionPerformed
     /* Filters events */
     private void jMenuItemFilterActionPerformed(java.awt.event.ActionEvent evt, String name) {
         showPreviewPanel(this, new JPreviewPanelFilter(name, filters.get(name)));
@@ -888,10 +932,11 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemAbout;
     private javax.swing.JMenuItem jMenuItemBinarization;
     private javax.swing.JMenuItem jMenuItemBrightness;
+    private javax.swing.JMenuItem jMenuItemEHistNorm;
     private javax.swing.JMenuItem jMenuItemExit;
-    private javax.swing.JMenuItem jMenuItemExtendRangeBr;
     private javax.swing.JMenuItem jMenuItemGamma;
     private javax.swing.JMenuItem jMenuItemGrayscale;
+    private javax.swing.JMenuItem jMenuItemHistEqual;
     private javax.swing.JMenuItem jMenuItemHistogramShow;
     private javax.swing.JMenuItem jMenuItemInvert;
     private javax.swing.JMenuItem jMenuItemLog;

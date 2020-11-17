@@ -80,9 +80,9 @@ public class JPreviewPanelHistExtend extends JPreviewPanel {
         for (int y = 0; y < input.getHeight(); y++) {
             for (int x = 0; x < input.getWidth(); x++) {
                 int pixel = input.getRGB(x, y);
-                int r = (getRed(pixel) - min) * 255/(max - min);
-                int g = (getGreen(pixel) - min) * 255/(max - min);
-                int b = (getBlue(pixel) - min) * 255/(max - min);
+                int r = (max - min) > 0 ? (getRed(pixel) - min) * 255/(max - min) : getRed(pixel);
+                int g = (max - min) > 0 ? (getGreen(pixel) - min) * 255/(max - min) : getGreen(pixel);
+                int b = (max - min) > 0 ? (getBlue(pixel) - min) * 255/(max - min) : getBlue(pixel);
                 output.setRGB(x, y, toRGB(r, g, b));
             }
         }

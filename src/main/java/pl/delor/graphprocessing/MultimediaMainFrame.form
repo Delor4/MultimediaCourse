@@ -149,12 +149,20 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemProjectionsActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemExtendRangeBr">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemEHistNorm">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Histogram Normalization"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemExtendRangeBrActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemEHistNormActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemHistEqual">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Histogram Equalization"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemHistEqualActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
