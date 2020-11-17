@@ -317,6 +317,8 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         jMenuItemGamma = new javax.swing.JMenuItem();
         jMenuItemLog = new javax.swing.JMenuItem();
         jMenuItemBinarization = new javax.swing.JMenuItem();
+        jMenuItemErosion = new javax.swing.JMenuItem();
+        jMenuItemDilation = new javax.swing.JMenuItem();
         jSubMenuMenuFilters = new javax.swing.JMenu();
         jMenuHistogram = new javax.swing.JMenu();
         jMenuItemHistogramShow = new javax.swing.JMenuItem();
@@ -523,6 +525,22 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
             }
         });
         jSubMenuPixelManip.add(jMenuItemBinarization);
+
+        jMenuItemErosion.setText("Erosion");
+        jMenuItemErosion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemErosionActionPerformed(evt);
+            }
+        });
+        jSubMenuPixelManip.add(jMenuItemErosion);
+
+        jMenuItemDilation.setText("Dilation");
+        jMenuItemDilation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemDilationActionPerformed(evt);
+            }
+        });
+        jSubMenuPixelManip.add(jMenuItemDilation);
 
         jMenuEdit.add(jSubMenuPixelManip);
 
@@ -815,6 +833,14 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private void jMenuItemHistEqualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemHistEqualActionPerformed
         showHistogramEqualization();
     }//GEN-LAST:event_jMenuItemHistEqualActionPerformed
+
+    private void jMenuItemErosionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemErosionActionPerformed
+        showPreviewPanel(new JPreviewPanelMorf(1));
+    }//GEN-LAST:event_jMenuItemErosionActionPerformed
+
+    private void jMenuItemDilationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDilationActionPerformed
+        showPreviewPanel(new JPreviewPanelMorf(0));
+    }//GEN-LAST:event_jMenuItemDilationActionPerformed
     /* Filters events */
     private void jMenuItemFilterActionPerformed(java.awt.event.ActionEvent evt, String name) {
         showPreviewPanel(new JPreviewPanelFilter(name, filters.get(name)));
@@ -878,7 +904,9 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemAbout;
     private javax.swing.JMenuItem jMenuItemBinarization;
     private javax.swing.JMenuItem jMenuItemBrightness;
+    private javax.swing.JMenuItem jMenuItemDilation;
     private javax.swing.JMenuItem jMenuItemEHistNorm;
+    private javax.swing.JMenuItem jMenuItemErosion;
     private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JMenuItem jMenuItemGamma;
     private javax.swing.JMenuItem jMenuItemGrayscale;
