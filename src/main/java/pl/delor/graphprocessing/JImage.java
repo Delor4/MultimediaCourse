@@ -110,7 +110,6 @@ public class JImage extends javax.swing.JPanel {
     }
 
     public void setImage(BufferedImage image) {
-        if(this.image == image) return;
         this.image = image;
         this.avgBrightness = null;
         this.contrastVariance = null;
