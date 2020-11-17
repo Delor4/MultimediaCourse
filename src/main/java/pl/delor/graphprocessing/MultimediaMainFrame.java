@@ -643,13 +643,13 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         updateStatsLabels();
     }
 
-    private void showPreviewPanel(MultimediaMainFrame mf, JPreviewPanel panel) {
-        if (mf == null || panel == null || mf.getImageOutput() == null) {
+    private void showPreviewPanel(JPreviewPanel panel) {
+        if (panel == null || this.getImageOutput() == null) {
             return;
         }
-        JPreview p = new JPreview(mf, mf.getImageOutput(), panel);
+        JPreview p = new JPreview(this, this.getImageOutput(), panel);
         if (p.getExitStatus() == JPreview.STATUS.OK) {
-            mf.setChangedImage(p.getImageOutput());
+            this.setChangedImage(p.getImageOutput());
             updateStatsLabels();
         }
         p.dispose();
@@ -722,7 +722,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
                 }
             }
         }
-        showPreviewPanel(this, new JPreviewPanelProcess("Histogram Equalization", (pixel) -> {
+        showPreviewPanel(new JPreviewPanelProcess("Histogram Equalization", (pixel) -> {
             int r = (cdf[0][255] - cdf[0][0]) > 0 ? (int)(255 * (cdf[0][getRed(pixel)] - minCDF[0])/(cdf[0][255] - minCDF[0])) : (int)cdf[0][0];
             int g = (cdf[1][255] - cdf[1][0]) > 0 ?(int)(255 * (cdf[1][getGreen(pixel)] - minCDF[1])/(cdf[1][255] - minCDF[1])) : (int)cdf[1][0];
             int b = (cdf[2][255] - cdf[2][0]) > 0 ?(int)(255 * (cdf[2][getBlue(pixel)] - minCDF[2])/(cdf[2][255] - minCDF[2])) : (int)cdf[2][0];
@@ -748,23 +748,23 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
 
     /* Simple panel */
     private void jMenuItemToGrayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemToGrayActionPerformed
-        showPreviewPanel(this, new JPreviewPanelTG());
+        showPreviewPanel(new JPreviewPanelTG());
     }//GEN-LAST:event_jMenuItemToGrayActionPerformed
 
     /* Panel with slider */
     private void jMenuItemBrightnessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemBrightnessActionPerformed
-        showPreviewPanel(this, new JPreviewPanelBrightness());
+        showPreviewPanel(new JPreviewPanelBrightness());
     }//GEN-LAST:event_jMenuItemBrightnessActionPerformed
 
     /* Simple panel with pixel processing in lambda expression */
     private void jMenuItemInvertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemInvertActionPerformed
-        showPreviewPanel(this, new JPreviewPanelProcess("Invert", (pixel) -> {
+        showPreviewPanel(new JPreviewPanelProcess("Invert", (pixel) -> {
             return toRGB(255 - getRed(pixel), 255 - getGreen(pixel), 255 - getBlue(pixel));
         }));
     }//GEN-LAST:event_jMenuItemInvertActionPerformed
 
     private void jMenuItemGrayscaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGrayscaleActionPerformed
-        showPreviewPanel(this, new JPreviewPanelProcess("Grayscale (luminance)", (pixel) -> {
+        showPreviewPanel(new JPreviewPanelProcess("Grayscale (luminance)", (pixel) -> {
             int luminance = toLuminance(getRed(pixel), getGreen(pixel), getBlue(pixel));
             return toRGB(luminance, luminance, luminance);
         }));
@@ -775,16 +775,16 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxMenuItemShowStatsStateChanged
 
     private void jMenuItemPowerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPowerActionPerformed
-        showPreviewPanel(this, new JPreviewPanelPower());
+        showPreviewPanel(new JPreviewPanelPower());
     }//GEN-LAST:event_jMenuItemPowerActionPerformed
 
     private void jMenuItemGammaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGammaActionPerformed
-        showPreviewPanel(this, new JPreviewPanelGamma());
+        showPreviewPanel(new JPreviewPanelGamma());
     }//GEN-LAST:event_jMenuItemGammaActionPerformed
 
     private void jMenuItemLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLogActionPerformed
         double l_256 = Math.log(1+255); 
-        showPreviewPanel(this, new JPreviewPanelProcess("Logarithm", (pixel) -> {
+        showPreviewPanel(new JPreviewPanelProcess("Logarithm", (pixel) -> {
             int r = (int)(255 * Math.log(getRed(pixel))/l_256);
             int g = (int)(255 * Math.log(getGreen(pixel))/l_256);
             int b = (int)(255 * Math.log(getBlue(pixel))/l_256);
@@ -793,7 +793,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemLogActionPerformed
 
     private void jMenuItemBinarizationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemBinarizationActionPerformed
-        showPreviewPanel(this, new JPreviewPanelBinary());
+        showPreviewPanel(new JPreviewPanelBinary());
     }//GEN-LAST:event_jMenuItemBinarizationActionPerformed
 
     private void jMenuItemHistogramShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemHistogramShowActionPerformed
@@ -809,7 +809,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemProjectionsActionPerformed
 
     private void jMenuItemEHistNormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEHistNormActionPerformed
-        showPreviewPanel(this, new JPreviewPanelHistExtend());
+        showPreviewPanel(new JPreviewPanelHistExtend());
     }//GEN-LAST:event_jMenuItemEHistNormActionPerformed
            
     private void jMenuItemHistEqualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemHistEqualActionPerformed
@@ -817,16 +817,16 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemHistEqualActionPerformed
     /* Filters events */
     private void jMenuItemFilterActionPerformed(java.awt.event.ActionEvent evt, String name) {
-        showPreviewPanel(this, new JPreviewPanelFilter(name, filters.get(name)));
+        showPreviewPanel(new JPreviewPanelFilter(name, filters.get(name)));
     } 
     private void jMenuItemCustomFilterActionPerformed(java.awt.event.ActionEvent evt) {
-        showPreviewPanel(this, new JPreviewPanelFilterCustom());
+        showPreviewPanel(new JPreviewPanelFilterCustom());
     } 
     private void jMenuItemFilterRoberts1ActionPerformed(java.awt.event.ActionEvent evt) {
-        showPreviewPanel(this, new JPreviewPanelFilterRoberts("Roberts Filter 1"));
+        showPreviewPanel(new JPreviewPanelFilterRoberts("Roberts Filter 1"));
     } 
     private void jMenuItemFilterRoberts2ActionPerformed(java.awt.event.ActionEvent evt) {
-        showPreviewPanel(this, new JPreviewPanelFilterRoberts2("Roberts Filter 2"));
+        showPreviewPanel(new JPreviewPanelFilterRoberts2("Roberts Filter 2"));
     } 
     /**
      * @param args the command line arguments
