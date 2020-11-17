@@ -708,69 +708,13 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
             statsChangedCd.setVisible(false);
         }
     }
-    private int[][] getHistogramData() {        
-        if(imageOutput == null) return null;
-        
-        int hist[][] = new int[3][256];
-        for (int y = 0; y < imageOutput.getHeight(); y++) {
-            for (int x = 0; x < imageOutput.getWidth(); x++) {
-                int pixel = imageOutput.getRGB(x, y);
-                hist[0][getRed(pixel)]++;
-                hist[1][getGreen(pixel)]++;
-                hist[2][getBlue(pixel)]++;
-            }
-        }
-        return hist;
-    }
-    private List<int[][]> getProjectionsData() {
-        if(imageOutput == null) return null;
-        
-        List<int[][]> projList = new ArrayList<int[][]>();
-        
-        int projHoriz[][] = new int[3][imageOutput.getWidth()];
-        int projVert[][] = new int[3][imageOutput.getHeight()];
-        
-        for (int y = 0; y < imageOutput.getHeight(); y++) {
-            for (int x = 0; x < imageOutput.getWidth(); x++) {
-                int pixel = imageOutput.getRGB(x, y);
-                if(getRed(pixel) > 127){
-                    projHoriz[0][x]++;
-                    projVert[0][y]++;
-                }
-                if(getGreen(pixel) > 127){
-                    projHoriz[1][x]++;
-                    projVert[1][y]++;
-                }
-                if(getBlue(pixel) > 127){
-                    projHoriz[2][x]++;
-                    projVert[2][y]++;
-                }
-            }
-        }
-        projList.add(projHoriz);
-        projList.add(projVert);
-        return projList;
-    }
-private long [][] makeCDF(int [][] hist){
-        long [][] cdf = new long[hist.length][hist[0].length];
-        for(int c = 0; c < 3; c++){
-            long val = 0;
-            for(int i = 0; i < hist[c].length; i++){
-                val += hist[c][i];
-                cdf[c][i] = val;
-            }
-        }
-        return cdf;
-    }
-    
+
     private void showHistogramEqualization() {
         if(imageOutput == null) return;
-        
-        int [][] hist = getHistogramData();
-        long [][] cdf = makeCDF(hist);
+        long [][] cdf = jImageChanged.getCDF();
             
         int minCDF[] = new int[]{(int)cdf[0][255], (int)cdf[1][255], (int)cdf[2][255]};
-        for(int c = 0; c < 3; c++) {
+        for(int c = 0; c < cdf.length; c++) {
             for(int i = 0; i < cdf[c].length; i++) {
                 if(cdf[c][i] > 0) {
                     minCDF[c] = (int)cdf[c][i];
@@ -854,13 +798,13 @@ private long [][] makeCDF(int [][] hist){
 
     private void jMenuItemHistogramShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemHistogramShowActionPerformed
         if(imageOutput == null) return;
-        JHistogramDialog hist = new JHistogramDialog(getHistogramData());
+        JHistogramDialog hist = new JHistogramDialog(jImageChanged.getHistogram());
         hist.setVisible(true);
     }//GEN-LAST:event_jMenuItemHistogramShowActionPerformed
 
     private void jMenuItemProjectionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemProjectionsActionPerformed
         if(imageOutput == null) return;
-        JProjectionsFrame proj = new JProjectionsFrame(getProjectionsData());
+        JProjectionsFrame proj = new JProjectionsFrame(jImageChanged.getProjections());
         proj.setVisible(true);
     }//GEN-LAST:event_jMenuItemProjectionsActionPerformed
 

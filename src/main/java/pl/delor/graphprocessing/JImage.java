@@ -3,6 +3,8 @@ package pl.delor.graphprocessing;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 import static pl.delor.graphprocessing.GP.getBlue;
 import static pl.delor.graphprocessing.GP.getGreen;
 import static pl.delor.graphprocessing.GP.getRed;
@@ -14,13 +16,13 @@ import static pl.delor.graphprocessing.GP.toRGB;
  */
 public class JImage extends javax.swing.JPanel {
 
-    /**
-     * Creates new form JImage
-     */
     private BufferedImage image = null;
     private Integer avgBrightness = null;
     private Integer contrastVariance = null;
     private Integer contrastDynamic = null;
+    private int histogram[][] = null;
+    private long[][] cdf = null;
+    private List<int[][]> projections = null;
 
     public Integer getAvgBrightness() {
         if (image == null) {
@@ -52,8 +54,55 @@ public class JImage extends javax.swing.JPanel {
         return contrastDynamic;
     }
 
+    public int[][] getHistogram() {
+        if (image == null) {
+            return null;
+        }
+        if (histogram == null) {
+            calculateHistogram();
+        }
+        return histogram;
+    }
+
+    public long[][] getCDF() {
+        if (image == null) {
+            return null;
+        }
+        if (cdf == null) {
+            calculateCDF();
+        }
+        return cdf;
+    }
+
+    public List<int[][]> getProjections() {
+        if (image == null) {
+            return null;
+        }
+        if (projections == null) {
+            calculateProjections();
+        }
+        return projections;
+    }
+
+    /**
+     * Creates new form JImage
+     */
     public JImage() {
         initComponents();
+    }
+
+    @FunctionalInterface
+    public interface ApplyPixel {
+
+        void apply(int pixel);
+    }
+
+    void forEachPixel(ApplyPixel f) {
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                f.apply(image.getRGB(x, y));
+            }
+        }
     }
 
     public BufferedImage getImage() {
@@ -61,10 +110,14 @@ public class JImage extends javax.swing.JPanel {
     }
 
     public void setImage(BufferedImage image) {
+        if(this.image == image) return;
         this.image = image;
         this.avgBrightness = null;
         this.contrastVariance = null;
         this.contrastDynamic = null;
+        this.histogram = null;
+        this.cdf = null;
+        this.projections = null;
         this.repaint();
     }
 
@@ -77,27 +130,23 @@ public class JImage extends javax.swing.JPanel {
                     this.getHeight(),
                     java.awt.Image.SCALE_SMOOTH
             );
-            g.drawImage(imageResized, 0, 0, this);        
+            g.drawImage(imageResized, 0, 0, this);
         }
     }
 
     private void calculateAvgBrightness() {
-        long sumRed = 0;
-        long sumGreen = 0;
-        long sumBlue = 0;
-        for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                int pixel = image.getRGB(x, y);
-                sumRed += getRed(pixel);
-                sumGreen += getGreen(pixel);
-                sumBlue += getBlue(pixel);
-            }
-        }
+        final long sums[] = new long[3];
+        forEachPixel((pixel) -> {
+            sums[0] += getRed(pixel);
+            sums[1] += getGreen(pixel);
+            sums[2] += getBlue(pixel);
+        });
+
         long pixels = image.getHeight() * image.getWidth();
         avgBrightness = toRGB(
-                (int) (sumRed / pixels),
-                (int) (sumGreen / pixels),
-                (int) (sumBlue / pixels)
+                (int) (sums[0] / pixels),
+                (int) (sums[1] / pixels),
+                (int) (sums[2] / pixels)
         );
     }
 
@@ -106,54 +155,105 @@ public class JImage extends javax.swing.JPanel {
             calculateAvgBrightness();
         }
 
-        long sumRed = 0;
-        int avgRed = getRed(avgBrightness);
-        long sumGreen = 0;
-        int avgGreen = getGreen(avgBrightness);
-        long sumBlue = 0;
-        int avgBlue = getBlue(avgBrightness);
+        final long sums[] = new long[3];
 
-        for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                int pixel = image.getRGB(x, y);
-                sumRed += (getRed(pixel) - avgRed) * (getRed(pixel) - avgRed);
-                sumGreen += (getGreen(pixel) - avgGreen) * (getGreen(pixel) - avgGreen);
-                sumBlue += (getBlue(pixel) - avgBlue) * (getBlue(pixel) - avgBlue);
-            }
-        }
+        final int avgRed = getRed(avgBrightness);
+        final int avgGreen = getGreen(avgBrightness);
+        final int avgBlue = getBlue(avgBrightness);
+
+        forEachPixel((pixel) -> {
+            sums[0] += (getRed(pixel) - avgRed) * (getRed(pixel) - avgRed);
+            sums[1] += (getGreen(pixel) - avgGreen) * (getGreen(pixel) - avgGreen);
+            sums[2] += (getBlue(pixel) - avgBlue) * (getBlue(pixel) - avgBlue);
+        });
         long pixels = image.getHeight() * image.getWidth();
         contrastVariance = toRGB(
-                (int) Math.sqrt(sumRed / pixels),
-                (int) Math.sqrt(sumGreen / pixels),
-                (int) Math.sqrt(sumBlue / pixels)
+                (int) Math.sqrt(sums[0] / pixels),
+                (int) Math.sqrt(sums[1] / pixels),
+                (int) Math.sqrt(sums[2] / pixels)
         );
     }
 
     private void calculateContrastDynamic() {
-        int maxRed = 0;
-        int maxGreen = 0;
-        int maxBlue = 0;
-        int minRed = 255;
-        int minGreen = 255;
-        int minBlue = 255;
+        final int min[] = new int[]{255, 255, 255};
+        final int max[] = new int[]{0, 0, 0};
+
+        forEachPixel((pixel) -> {
+            int r = getRed(pixel);
+            if (max[0] < r) {
+                max[0] = r;
+            }
+            if (min[0] > r) {
+                min[0] = r;
+            }
+
+            int g = getGreen(pixel);
+            if (max[1] < g) {
+                max[1] = g;
+            }
+            if (min[1] > g) {
+                min[1] = g;
+            }
+
+            int b = getBlue(pixel);
+            if (max[2] < b) {
+                max[2] = b;
+            }
+            if (min[2] > b) {
+                min[2] = b;
+            }
+        });
+        contrastDynamic = toRGB(max[0] - min[0], max[1] - min[1], max[2] - min[2]);
+    }
+
+    private void calculateHistogram() {
+        histogram = new int[3][256];
+        forEachPixel((pixel) -> {
+            histogram[0][getRed(pixel)]++;
+            histogram[1][getGreen(pixel)]++;
+            histogram[2][getBlue(pixel)]++;
+        });
+    }
+
+    private void calculateCDF() {
+        if (histogram == null) {
+            calculateHistogram();
+        }
+        cdf = new long[histogram.length][histogram[0].length];
+        for (int c = 0; c < cdf.length; c++) {
+            long val = 0;
+            for (int i = 0; i < histogram[c].length; i++) {
+                val += histogram[c][i];
+                cdf[c][i] = val;
+            }
+        }
+    }
+
+    private void calculateProjections() {
+        projections = new ArrayList<>();
+
+        int projHoriz[][] = new int[3][image.getWidth()];
+        int projVert[][] = new int[3][image.getHeight()];
 
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
                 int pixel = image.getRGB(x, y);
-                int red = getRed(pixel);
-                maxRed = maxRed < red ? red : maxRed;
-                minRed = minRed > red ? red : minRed;
-
-                int g = getGreen(pixel);
-                maxGreen = maxGreen < g ? g : maxGreen;
-                minGreen = minGreen > g ? g : minGreen;
-
-                int b = getBlue(pixel);
-                maxBlue = maxBlue < b ? b : maxBlue;
-                minBlue = minBlue > b ? b : minBlue;
+                if (getRed(pixel) > 127) {
+                    projHoriz[0][x]++;
+                    projVert[0][y]++;
+                }
+                if (getGreen(pixel) > 127) {
+                    projHoriz[1][x]++;
+                    projVert[1][y]++;
+                }
+                if (getBlue(pixel) > 127) {
+                    projHoriz[2][x]++;
+                    projVert[2][y]++;
+                }
             }
         }
-        contrastDynamic = toRGB((maxRed - minRed), (maxGreen - minGreen), (maxBlue - minBlue));
+        projections.add(projHoriz);
+        projections.add(projVert);
     }
 
     /**

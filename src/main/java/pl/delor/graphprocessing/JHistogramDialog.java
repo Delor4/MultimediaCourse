@@ -15,6 +15,8 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import java.awt.GridBagConstraints;
+import java.util.*; 
+import java.util.stream.*; 
 
 /**
  *
@@ -29,13 +31,13 @@ public class JHistogramDialog extends javax.swing.JFrame {
         this.hist = histData;
         initComponents();
         chartPanelConstraints = getChartPanelConstraints();
-        selectLineChartPanel();
+        selectHistChartPanel();
     }
     
-    private void selectLineChartPanel() {
+    private void selectHistChartPanel() {
         java.awt.Dimension oldDim = jPanelChart.getSize();
         remove(jPanelChart);
-        ChartPanel chartPanel = (ChartPanel) createLineChartPanel();
+        ChartPanel chartPanel = (ChartPanel) createHistChartPanel();
         jPanelChart = chartPanel;
         getContentPane().add(chartPanel, chartPanelConstraints);
         chartPanel.setPreferredSize(oldDim);
@@ -133,60 +135,34 @@ public class JHistogramDialog extends javax.swing.JFrame {
 
     private XYDataset createHistDataset() {
 
-        float ds[][] = new float[3][256];
-        int maxVal = 0;
-        long sumVal[] = new long[3];
-
+        float ds[][] = new float[3][hist[0].length];
+        
         for (int j = 0; j < hist.length; j++) {
-            for (int v : hist[j]) {
-                sumVal[j] += v;
-                if (maxVal < v) {
-                    maxVal = v;
-                }
-            }
-        }
-        for (int j = 0; j < hist.length; j++) {
+            long HistSum = Arrays.stream(hist[j]).sum();
             for (int i = 0; i < hist[0].length; i++) {
-                ds[j][i] = (float) hist[j][i] / sumVal[j];
+                ds[j][i] = (float) hist[j][i] / HistSum;
             }
         }
-
-        String seriesTitles[] = new String[]{"Red", "Green", "Blue"};
-
-        XYSeriesCollection dataset = new XYSeriesCollection();
-
-        for (int i = 0; i < ds.length; i++) {
-            XYSeries s = new XYSeries(seriesTitles[i]);
-            for (int j = 0; j < ds[i].length; j++) {
-                s.add(j, ds[i][j]);
-            }
-            dataset.addSeries(s);
-        }
-
-        return dataset;
+        
+        return createXYDataset(ds);
     }
-
+    
     private XYDataset createCumulativeDataset() {
-        float ds[][] = new float[3][256];
-        int maxVal = 0;
-        long sumVal[] = new long[3];
-
+        float ds[][] = new float[3][hist[0].length];
+ 
         for (int j = 0; j < hist.length; j++) {
-            for (int v : hist[j]) {
-                sumVal[j] += v;
-                if (maxVal < v) {
-                    maxVal = v;
-                }
-            }
-        }
-        for (int j = 0; j < hist.length; j++) {
+            long HistSum = Arrays.stream(hist[j]).sum();
             float sum = 0;
             for (int i = 0; i < hist[0].length; i++) {
-                sum += (float) hist[j][i] / sumVal[j];
+                sum += (float) hist[j][i] / HistSum;
                 ds[j][i] = sum;
             }
         }
 
+        return createXYDataset(ds);
+    }
+    private XYDataset createXYDataset(float[][] ds) {
+
         String seriesTitles[] = new String[]{"Red", "Green", "Blue"};
 
         XYSeriesCollection dataset = new XYSeriesCollection();
@@ -201,7 +177,7 @@ public class JHistogramDialog extends javax.swing.JFrame {
 
         return dataset;
     }
-    public JPanel createLineChartPanel() {
+    public JPanel createHistChartPanel() {
         return createChartPanel(createBarChart("Image histogram", createHistDataset()));
     }
     public JPanel createCumulativeChartPanel() {
@@ -283,7 +259,7 @@ public class JHistogramDialog extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        selectLineChartPanel();
+        selectHistChartPanel();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
