@@ -89,7 +89,7 @@
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemPower">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Power"/>
+                    <Property name="text" type="java.lang.String" value="Exponent"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemPowerActionPerformed"/>
@@ -97,7 +97,7 @@
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemGamma">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Gamma"/>
+                    <Property name="text" type="java.lang.String" value="Gamma Correction"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemGammaActionPerformed"/>
@@ -105,7 +105,7 @@
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemLog">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Log"/>
+                    <Property name="text" type="java.lang.String" value="Logarithm"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemLogActionPerformed"/>

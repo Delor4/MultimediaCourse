@@ -3,6 +3,7 @@ package pl.delor.graphprocessing;
 import javax.swing.JSlider;
 
 /**
+ * Base source code from: https://github.com/ernieyu/Swing-range-slider
  * An extension of JSlider to select a range of values using two thumb controls.
  * The thumb controls are used to select the lower and upper value of a range
  * with predetermined minimum and maximum values.

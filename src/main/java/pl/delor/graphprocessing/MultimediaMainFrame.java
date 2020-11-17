@@ -492,7 +492,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         });
         jSubMenuPixelManip.add(jMenuItemInvert);
 
-        jMenuItemPower.setText("Power");
+        jMenuItemPower.setText("Exponent");
         jMenuItemPower.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemPowerActionPerformed(evt);
@@ -500,7 +500,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         });
         jSubMenuPixelManip.add(jMenuItemPower);
 
-        jMenuItemGamma.setText("Gamma");
+        jMenuItemGamma.setText("Gamma Correction");
         jMenuItemGamma.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemGammaActionPerformed(evt);
@@ -508,7 +508,7 @@ public class MultimediaMainFrame extends javax.swing.JFrame {
         });
         jSubMenuPixelManip.add(jMenuItemGamma);
 
-        jMenuItemLog.setText("Log");
+        jMenuItemLog.setText("Logarithm");
         jMenuItemLog.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemLogActionPerformed(evt);
